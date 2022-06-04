@@ -3,8 +3,8 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
 # Client Credentials Flow and Scope settings
-CLIENT_ID = "YOUR CLIENT ID"
-CLIENT_SECRET = "YOUR SECRET"
+CLIENT_ID = ""
+CLIENT_SECRET = ""
 REDIRECT_URI = "http://example.com"
 SCOPE = ('user-library-read, playlist-read-private, playlist-modify-private, playlist-modify-public, user-read-private, user-library-modify, user-library-read')
 
@@ -18,7 +18,7 @@ class Spotify:
                 client_id=CLIENT_ID,
                 client_secret=CLIENT_SECRET,
                 show_dialog=True,
-                cache_path="token.txt"
+                cache_path="cache/token.txt"
             )
         )
 
@@ -46,5 +46,5 @@ class Spotify:
 # spot = Spotify()
 # playlist_id = '1ctLnyNe1eIHblFYt5cj41'
 # playlist = spot.get_playlist_by_id(playlist_id=playlist_id)
-# tracks = spot.get_track_author_list(playlist=playlist)
+# tracks = spot.get_track_artist_list(playlist=playlist)
 # print(tracks)
