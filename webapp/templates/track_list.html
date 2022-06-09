@@ -1,4 +1,28 @@
 {% extends 'base.html' %}
 {% block title %}Список треков{% endblock %}
-{% block content %}Список треков
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col">
+        Список треков
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        {% for i in name %}
+            <li>{{ i }}</li>
+        {% endfor %}
+      </div>
+      <div class="col">
+        {% for i in artist %}
+            <li>{{ i }}</li>
+        {% endfor %}
+      </div>
+      <div class="col">
+        {% for i in duration %}
+            <li>{{ i }}</li>
+        {% endfor %}
+      </div>
+    </div>
+</div>
 {% endblock %}
