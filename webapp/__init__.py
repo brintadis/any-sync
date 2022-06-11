@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template
 from webapp.forms import PlaylistLinkForm
 
+
 def create_app():
     app = Flask(__name__)
 
