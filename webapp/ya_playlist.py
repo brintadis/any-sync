@@ -5,14 +5,12 @@ def get_playlist(url):
     user_name = url.split('/')[4]
     id_playlist = url.split('/')[-1]
     playlist_list = Client().users_playlists(int(id_playlist), user_name)
-    # return playlist_list['tracks']
-    return playlist_list
+    # playlist_json = playlist_list.to_json()
+    return playlist_list['tracks']
 
 
 f = get_playlist('https://music.yandex.ru/users/shamantur116/playlists/1001')
 
-
-playlist_json = f.to_json()
 
 name_tracks = []
 for i in f:
