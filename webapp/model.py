@@ -34,7 +34,7 @@ class Playlist(db.Model):
     img_cover = db.Column(db.String, nullable=True)
 
     def __repr__(self):
-        return f"<Playlist {self.playlist_name} {self.owner}>"
+        return f"<Playlist {self.playlist_name} {self.owner_name}>"
 
 
 class Track(db.Model):
