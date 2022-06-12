@@ -6,15 +6,17 @@ from spotipy.oauth2 import SpotifyOAuth
 CLIENT_ID = ""
 CLIENT_SECRET = ""
 REDIRECT_URI = "http://example.com"
-SCOPE = ('user-library-read, playlist-read-private, playlist-modify-private, playlist-modify-public, user-read-private, user-library-modify, user-library-read')
+SCOPE = ('''user-library-read, playlist-read-private, playlist-modify-private, playlist-modify-public, user-read-private,
+          user-library-modify, user-library-read''')
+
 
 class Spotify:
-    
+
     def __init__(self) -> None:
         self.sp = spotipy.Spotify(
             auth_manager=SpotifyOAuth(
                 scope=SCOPE,
-                redirect_uri = REDIRECT_URI,
+                redirect_uri=REDIRECT_URI,
                 client_id=CLIENT_ID,
                 client_secret=CLIENT_SECRET,
                 show_dialog=True,
@@ -33,7 +35,7 @@ class Spotify:
         playlist_tracks = []
         for track in playlist['tracks']['items']:
             playlist_tracks.append({
-                'track_name': track['track']['name'], 
+                'track_name': track['track']['name'],
                 'artist': track['track']['artists'][0]['name']
                 }
             )
