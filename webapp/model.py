@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -9,7 +10,7 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
-        
+
 
 class Playlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,8 +29,9 @@ class Track(db.Model):
     playlist_id = db.Column(db.Integer, db.ForeignKey('playlist.id'))
     artist = db.Column(db.String, nullable=False)
     track_name = db.Column(db.String, nullable=False)
-    duration = db.db.Column(db.String, nullable=False)
-    img_cover = db.Column(db.String, nullable=False)
+    duration = db.Column(db.String, nullable=True)
+    img_cover = db.Column(db.String, nullable=True)
+    track_spotify_id = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         return f"<Track {self.track_name} by {self.artist}>"
