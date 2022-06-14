@@ -39,11 +39,11 @@ class Playlist(db.Model):
 
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    playlist_id = db.Column(db.Integer, db.ForeignKey('playlist.id'))
+    playlist = db.Column(db.Integer, db.ForeignKey('playlist.id'))
     artist = db.Column(db.String, nullable=False)
     track_name = db.Column(db.String, nullable=False)
     duration = db.Column(db.String, nullable=False)
-    img_cover = db.Column(db.String, nullable=False)
+    img_cover = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         return f"<Track {self.track_name} by {self.artist}>"
