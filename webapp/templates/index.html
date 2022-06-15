@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-<form action="" method="post">
-	{{ form.hidden_tag()}}
-	<p>
-		{{ form.link.label }}<br>{{ form.link() }}
-	</p>
-	<p>
-		{{ form.web_app.label }}<br>{{ form.web_app() }}
-	</p>
-	<p>{{ form.submit }}</p>
-</form>
+<div class="col-2">
+	<form action="" method="post">
+		{{ form.hidden_tag()}}
+		<div class="form-group">
+			{{ form.link.label }}<br>{{ form.link() }}
+		</div>
+		<div class="form-group">
+			1
+			2
+			3
+		</div>
+		{{ form.submit }}
+	</form>
+</div>
 {% endblock %}
