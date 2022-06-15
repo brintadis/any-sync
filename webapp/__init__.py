@@ -5,6 +5,7 @@ from webapp.forms import PlaylistLinkForm, LoginForm
 from webapp.model import db, User
 from webapp.ya_playlist import get_playlist_ya
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
@@ -32,7 +33,6 @@ def create_app():
 
     # @app.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
     # def playlist(playlist):
-
 
     @app.route("/login")
     def login():

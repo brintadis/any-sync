@@ -1,4 +1,3 @@
-# import json
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -25,13 +24,14 @@ class Spotify:
         )
 
     def get_playlist_by_id(self, playlist_id):
-        # Get full information about playlist by it id.
+        """Get full information about playlist by it id.
+        """
         self.playlist = self.sp.playlist(playlist_id=playlist_id)
-        # Return it in dict.
         return self.playlist
 
     def get_track_artist_list(self, playlist):
-        # Create list of dicts and append there all tracks from the playlist.
+        """Create list of dicts and append there all tracks from the playlist.
+        """
         playlist_tracks = []
         for track in playlist['tracks']['items']:
             playlist_tracks.append({
@@ -39,14 +39,13 @@ class Spotify:
                 'artist': track['track']['artists'][0]['name']
                 }
             )
-        # Return it in list.
         return playlist_tracks
 
 
-# FOR TESTING
-# ///
-# spot = Spotify()
-# playlist_id = '1ctLnyNe1eIHblFYt5cj41'
-# playlist = spot.get_playlist_by_id(playlist_id=playlist_id)
-# tracks = spot.get_track_artist_list(playlist=playlist)
-# print(tracks)
+if __name__ == "__main__":
+    import json
+    spot = Spotify()
+    playlist_id = '1ctLnyNe1eIHblFYt5cj41'
+    playlist = spot.get_playlist_by_id(playlist_id=playlist_id)
+    tracks = spot.get_track_artist_list(playlist=playlist)
+    print(json.dumps(playlist))
