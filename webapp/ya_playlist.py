@@ -17,10 +17,10 @@ def get_playlist_ya(url):
 def save_playlist(playlist_name, owner_name, tracks, id_playlist):
     new_playlist = Playlist(playlist_name=playlist_name, owner_name=owner_name)
     db.session.add(new_playlist)
-    # db.session.commit()
+    db.session.commit()
     for track in tracks:
         new_track = Track(
-            playlist=new_playlist, artist=track['track']['artists'][0]['name'],
+            playlist=new_playlist.id, artist=track['track']['artists'][0]['name'],
             track_name=track['track']['title'], duration=track['track']['duration_ms'])
         db.session.add(new_track)
     db.session.commit()
