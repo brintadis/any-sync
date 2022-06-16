@@ -3,8 +3,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from webapp.model import Playlist, db, Track
 
 # Client Credentials Flow and Scope settings
-CLIENT_ID = "05aecee3d14b494d89ee2fcf8faede62"
-CLIENT_SECRET = "b28942419390419881759ed6ccc7e2cc"
+CLIENT_ID = ""
+CLIENT_SECRET = ""
 REDIRECT_URI = "http://example.com"
 SCOPE = ('''user-library-read, playlist-read-private, playlist-modify-private, playlist-modify-public, user-read-private,
           user-library-modify, user-library-read''')
