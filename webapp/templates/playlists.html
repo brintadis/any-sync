@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Список треков{% endblock %}
+{% block content %}
+<div class="row" style="margin: 5% auto;">
+    <div class="col-5">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-dark">Название трека</li>
+            {% for playlist in playlists %}
+            <li class="list-group-item">{{ playlist.playlist_name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-4">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-dark">Исполнитель</li>
+            {% for playlist in playlists %}
+            <li class="list-group-item">{{ playlist.owner_name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

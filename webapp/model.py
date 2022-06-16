@@ -25,6 +25,18 @@ class User(db.Model, UserMixin):
         return self.role == 'admin'
 
 
+class Track(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    playlist = db.Column(db.Integer, db.ForeignKey('playlist.id'))
+    artist = db.Column(db.String, nullable=False)
+    track_name = db.Column(db.String, nullable=False)
+    duration = db.Column(db.String, nullable=False)
+    img_cover = db.Column(db.String, nullable=True)
+
+    def __repr__(self):
+        return f"<Track {self.track_name} by {self.artist}>"
+
+
 class Playlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     playlist_name = db.Column(db.String, nullable=False)
@@ -36,14 +48,5 @@ class Playlist(db.Model):
     def __repr__(self):
         return f"<Playlist {self.playlist_name} {self.owner_name}>"
 
-
-class Track(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    playlist = db.Column(db.Integer, db.ForeignKey('playlist.id'))
-    artist = db.Column(db.String, nullable=False)
-    track_name = db.Column(db.String, nullable=False)
-    duration = db.Column(db.String, nullable=False)
-    img_cover = db.Column(db.String, nullable=True)
-
-    def __repr__(self):
-        return f"<Track {self.track_name} by {self.artist}>"
+    def count_tracks(self):
+        return Track.query().filter(Track.playlist == self.id).count

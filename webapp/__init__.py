@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from webapp.forms import PlaylistLinkForm, LoginForm
-from webapp.model import db, User, Track
+from webapp.model import db, User, Playlist
 from webapp.ya_playlist import get_playlist_ya
 from webapp.spotify import get_playlist_by_id
 
@@ -35,11 +35,11 @@ def create_app():
             # return redirect
         return render_template('index.html', page_title=title, form=url_form)
 
-    @app.route("/playlist")
-    def playlist():
+    @app.route("/playlists")
+    def get_playlist():
         title = "Список треков"
-        track_list = Track.query.all()
-        return render_template('playlist.html', page_title=title, track_list=track_list)
+        playlists = Playlist.query.all()
+        return render_template('playlists.html', page_title=title, playlists=playlists)
 
     # @app.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
     # def playlist(playlist):
