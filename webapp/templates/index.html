@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-2">
-	<form action="" method="post">
-		{{ form.hidden_tag()}}
-		<div class="form-group">
-			{{ form.link.label }}<br>{{ form.link() }}
+<div class="row" style="margin: 10%;">
+	<div class="col">
+		<form action="" method="post">
+			{{ form.hidden_tag()}}
+			<div class="form-group">
+				{{ form.link.label }}<br>{{ form.link() }}
+			</div>
+			<div style="padding-top: 15px;">
+				{{ form.submit }}
+			</div>
+		</form>
+	</div>
+	<div class="col">
+		<p>Доступные музыкальные сервисы:</p>
+		<div class="list-group">
+			<a href="https://www.spotify.com/" class="list-group-item list-group-item-action">Spotify</a>
+			<a href="https://music.yandex.ru/" class="list-group-item list-group-item-action">Yandex Music</a>
+			<a href="https://music.apple.com/" class="list-group-item list-group-item-action disabled">В разработке Apple Music</a>
 		</div>
-		<div class="form-group">
-			1
-			2
-			3
-		</div>
-		{{ form.submit }}
-	</form>
+	</div>
 </div>
+
+
 {% endblock %}

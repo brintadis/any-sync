@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from webapp.forms import PlaylistLinkForm, LoginForm
-from webapp.model import db, User
+from webapp.model import db, User, Track
 from webapp.ya_playlist import get_playlist_ya
 from webapp.spotify import get_playlist_by_id
 
@@ -28,9 +28,18 @@ def create_app():
         title = "AnySync"
         url_form = PlaylistLinkForm()
         if url_form.validate_on_submit():
-            get_playlist_by_id(url_form.link.data)
-            return redirect
+            if 'spotify' in url_form.link.data:
+                get_playlist_by_id(url_form.link.data)
+            elif 'yandex' in url_form.link.data:
+                get_playlist_ya(url_form.link.data)
+            # return redirect
         return render_template('index.html', page_title=title, form=url_form)
+
+    @app.route("/playlist")
+    def playlist():
+        title = "Список треков"
+        track_list = Track.query.all()
+        return render_template('playlist.html', page_title=title, track_list=track_list)
 
     # @app.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
     # def playlist(playlist):
