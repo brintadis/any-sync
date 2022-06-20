@@ -2,9 +2,10 @@ import os
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from webapp.forms import PlaylistLinkForm, LoginForm
-from webapp.model import db, User, Playlist
+from webapp.model import db, User, Playlist, Track
 from webapp.ya_playlist import get_playlist_ya
 from webapp.spotify import get_playlist_by_id
+# set FLASK_APP=webapp && set FLASK_ENV=development && set FLASK_DEBUG=1 && flask run
 
 
 def create_app():
@@ -31,18 +32,21 @@ def create_app():
             if 'spotify' in url_form.link.data:
                 get_playlist_by_id(url_form.link.data)
             elif 'yandex' in url_form.link.data:
-                get_playlist_ya(url_form.link.data)
-            # return redirect
+                new_playlist = get_playlist_ya(url_form.link.data)
+                return redirect(f'/playlist/{new_playlist.id}')
         return render_template('index.html', page_title=title, form=url_form)
 
     @app.route("/playlists")
     def get_playlist():
-        title = "Список треков"
+        title = "Список плейлистов"
         playlists = Playlist.query.all()
         return render_template('playlists.html', page_title=title, playlists=playlists)
 
-    # @app.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
-    # def playlist(playlist):
+    @app.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
+    def playlist(playlist_id):
+        title = 'Треклист плейлиста'
+        track_list = Track.query.filter(Track.playlist == playlist_id)
+        return render_template('playlist.html', page_title=title, track_list=track_list)
 
     @app.route("/login")
     def login():

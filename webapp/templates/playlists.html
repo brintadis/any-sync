@@ -6,7 +6,7 @@
         <ul class="list-group">
             <li class="list-group-item list-group-item-dark">Название трека</li>
             {% for playlist in playlists %}
-            <li class="list-group-item">{{ playlist.playlist_name }}</li>
+            <li class="list-group-item"><a href="/playlist/{{ playlist.id }}">{{ playlist.playlist_name }}</a></li>
             {% endfor %}
         </ul>
     </div>
