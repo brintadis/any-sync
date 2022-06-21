@@ -8,7 +8,7 @@
             {% for playlist in playlists %}
             <li class="list-group-item">
                 <div class="row">
-                    <div class="p-2 bd-highlight">{{ playlist.playlist_name }}</div>
+                    <div class="p-2 bd-highlight"><a href="/playlist/{{ playlist.id }}">{{ playlist.playlist_name }}</a></div>
                     <div class="ml-auto p-2 bd-highlight">{{ playlist.count_tracks() }}</div>
                 </div>
             </li>

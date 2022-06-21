@@ -4,6 +4,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from webapp.model import Playlist, db, Track
 
 # Client Credentials Flow and Scope settings
+# CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
+# CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = "http://example.com"
