@@ -5,8 +5,6 @@ from wtforms.validators import DataRequired, URL
 
 class PlaylistLinkForm(FlaskForm):
     link = URLField('Ссылка на плейлист', validators=[DataRequired(), URL()], render_kw={"class": "form-control"})
-    # web_app = SelectField('Выберите музыкальный сервис', choices=[
-    #     'Spotify', 'YandexMusic'], validators=[DataRequired()])
     submit = SubmitField('Отправить', render_kw={"class": "btn btn-primary"})
 
 

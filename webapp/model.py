@@ -44,7 +44,7 @@ class Playlist(db.Model):
     last_update = db.Column(db.DateTime, nullable=True)
     description = db.Column(db.Text, nullable=True)
     img_cover = db.Column(db.String, nullable=True)
-    kind = db.Column(db.String, nullable=False)
+    kind = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         return f"<Playlist {self.playlist_name} {self.owner_name}>"
