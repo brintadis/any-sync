@@ -4,15 +4,20 @@
 <div class="row" style="margin: 5% auto;">
     <div class="col-5">
         <ul class="list-group">
-            <li class="list-group-item list-group-item-dark">Название трека</li>
+            <li class="list-group-item list-group-item-dark">Название плейлиста</li>
             {% for playlist in playlists %}
-            <li class="list-group-item"><a href="/playlist/{{ playlist.id }}">{{ playlist.playlist_name }}</a></li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="p-2 bd-highlight"><a href="/playlist/{{ playlist.id }}">{{ playlist.playlist_name }}</a></div>
+                    <div class="ml-auto p-2 bd-highlight">{{ playlist.count_tracks() }}</div>
+                </div>
+            </li>
             {% endfor %}
         </ul>
     </div>
     <div class="col-4">
         <ul class="list-group">
-            <li class="list-group-item list-group-item-dark">Исполнитель</li>
+            <li class="list-group-item list-group-item-dark">Создатель плейлиста</li>
             {% for playlist in playlists %}
             <li class="list-group-item">{{ playlist.owner_name }}</li>
             {% endfor %}
