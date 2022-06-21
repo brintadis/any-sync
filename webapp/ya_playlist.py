@@ -19,8 +19,8 @@ def save_playlist(playlist_name, owner_name, tracks, id_playlist):
     db.session.add(new_playlist)
     db.session.commit()
     for track in tracks:
-        duration = str(track['track']['duration_ms'] * 0.000016)
-        duration = f'{min[:1]}:{min[2:4]}'
+        duration = str(int(track['track']['duration_ms']) * 0.000016)
+        duration = f'{duration[:1]}:{duration[2:4]}'
         new_track = Track(
             playlist=new_playlist.id, artist=track['track']['artists'][0]['name'],
             track_name=track['track']['title'], duration=duration)

@@ -49,4 +49,4 @@ class Playlist(db.Model):
         return f"<Playlist {self.playlist_name} {self.owner_name}>"
 
     def count_tracks(self):
-        return Track.query().filter(Track.playlist == self.id).count
+        return Track.query.filter(Track.playlist == self.id).count()

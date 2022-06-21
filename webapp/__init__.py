@@ -37,7 +37,7 @@ def create_app():
 
     @app.route("/playlists")
     def get_playlist():
-        title = "Список треков"
+        title = "Список плейлистов"
         playlists = Playlist.query.all()
         return render_template('playlists.html', page_title=title, playlists=playlists)
 
