@@ -5,8 +5,6 @@ from webapp.model import Playlist, db, Track
 from datetime import timedelta
 
 # Client Credentials Flow and Scope settings
-# CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
-# CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = "http://example.com"
@@ -35,28 +33,13 @@ def get_playlist_by_id(playlist_url, sp=sp):
     playlist_name = playlist['name']
     owner_name = playlist['owner']['display_name']
     img_cover = playlist['images'][1]['url']
-    save_playlist(
+    return save_playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
         img_cover=img_cover,
         tracks=playlist['tracks']['items'],
         id_playlist=playlist_id
     )
-
-    return playlist
-
-
-# def get_track_artist_list(playlist):
-#     """Create list of dicts and append there all tracks from the playlist.
-#     """
-#     playlist_tracks = []
-#     for track in playlist['tracks']['items']:
-#         playlist_tracks.append({
-#             'track_name': track['track']['name'],
-#             'artist': track['track']['artists'][0]['name']
-#             }
-#         )
-#     return playlist_tracks
 
 
 def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
@@ -71,6 +54,7 @@ def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
             track_name=track['track']['name'], duration=duration)
         db.session.add(new_track)
     db.session.commit()
+    return new_playlist
 
 
 if __name__ == "__main__":

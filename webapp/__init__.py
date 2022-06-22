@@ -24,17 +24,23 @@ def create_app():
     def load_user(user_id):
         return User.query.get(user_id)
 
-    @app.route("/", methods=['GET', 'POST'])
+    @app.route("/")
     def index():
+        title = "AnySync"
+        return render_template('index.html', page_title=title)
+
+    @app.route("/test", methods=['GET', 'POST'])
+    def test():
         title = "AnySync"
         url_form = PlaylistLinkForm()
         if url_form.validate_on_submit():
             if 'spotify' in url_form.link.data:
-                get_playlist_by_id(url_form.link.data)
+                new_playlist = get_playlist_by_id(url_form.link.data)
+                return redirect(f'/playlist/{new_playlist.id}')
             elif 'yandex' in url_form.link.data:
                 new_playlist = get_playlist_ya(url_form.link.data)
                 return redirect(f'/playlist/{new_playlist.id}')
-        return render_template('index.html', page_title=title, form=url_form)
+        return render_template('test.html', page_title=title, form=url_form)
 
     @app.route("/playlists")
     def get_playlist():
