@@ -2,6 +2,7 @@ import spotipy
 import os
 from spotipy.oauth2 import SpotifyClientCredentials
 from webapp.model import Playlist, db, Track
+from datetime import timedelta
 
 # Client Credentials Flow and Scope settings
 CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
@@ -31,21 +32,23 @@ def get_playlist_by_id(playlist_url, sp=sp):
     playlist = sp.playlist(playlist_id=playlist_id)
     playlist_name = playlist['name']
     owner_name = playlist['owner']['display_name']
+    img_cover = playlist['images'][1]['url']
     return save_playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
+        img_cover=img_cover,
         tracks=playlist['tracks']['items'],
         id_playlist=playlist_id
     )
 
 
-def save_playlist(playlist_name, owner_name, tracks, id_playlist):
-    new_playlist = Playlist(playlist_name=playlist_name, owner_name=owner_name)
+def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
+    new_playlist = Playlist(playlist_name=playlist_name, owner_name=owner_name, img_cover=img_cover)
     db.session.add(new_playlist)
     db.session.commit()
     for track in tracks:
-        duration = str(int(track['track']['duration_ms']) * 0.000016)
-        duration = f'{duration[:1]}:{duration[2:4]}'
+        duration_ms = int(track['track']['duration_ms'])
+        duration = str(timedelta(milliseconds=duration_ms))
         new_track = Track(
             playlist=new_playlist.id, artist=track['track']['artists'][0]['name'],
             track_name=track['track']['name'], duration=duration)
