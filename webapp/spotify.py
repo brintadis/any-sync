@@ -33,7 +33,7 @@ def get_playlist_by_id(playlist_url, sp=sp):
     playlist_name = playlist['name']
     owner_name = playlist['owner']['display_name']
     img_cover = playlist['images'][0]['url']
-    save_playlist(
+    return save_playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
         img_cover=img_cover,
