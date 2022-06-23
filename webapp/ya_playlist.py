@@ -15,6 +15,7 @@ def get_playlist_ya(url):
         img_cover = playlist_playlist.cover.items_uri[0].replace('%%', '200x200')
     else:
         img_cover = str(playlist_playlist.cover['uri']).replace('%%', '200x200')
+        img_cover = f'https://{img_cover}'
     return save_playlist(playlist_name, owner_name, playlist_playlist.tracks, kind_playlist, img_cover)
 
 
