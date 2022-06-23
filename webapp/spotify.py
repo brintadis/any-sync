@@ -53,7 +53,7 @@ def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
         # duration = str(timedelta(milliseconds=duration_ms))
         new_track = Track(
             playlist=new_playlist.id, artist=track['track']['artists'][0]['name'],
-            track_name=track['track']['name'], duration=duration)
+            track_name=track['track']['name'], duration=duration, img_cover=track['track']['album']['images'][0]['url'])
         db.session.add(new_track)
     db.session.commit()
     return new_playlist

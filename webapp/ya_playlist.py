@@ -24,12 +24,17 @@ def save_playlist(playlist_name, owner_name, tracks, kind_playlist, img_cover):
     db.session.add(new_playlist)
     db.session.commit()
     for track in tracks:
+        # duration = str(track['track']['duration_ms'] * 0.000016)
+        # duration = f'{duration[:1]}:{duration[2:4]}'
         duration_ms = track['track']['duration_ms']
         duration_and_random_date = datetime(1970, 1, 1) + timedelta(milliseconds=duration_ms)
         duration = duration_and_random_date.strftime("%M:%S")
+        # duration = str(timedelta(milliseconds=duration_ms))
+        img_cover = str(track['track']['cover_uri']).replace('%%', '200x200')
+        img_cover = f'https://{img_cover}'
         new_track = Track(
             playlist=new_playlist.id, artist=track['track']['artists'][0]['name'],
-            track_name=track['track']['title'], duration=duration)
+            track_name=track['track']['title'], duration=duration, img_cover=img_cover)
         db.session.add(new_track)
     db.session.commit()
     return new_playlist

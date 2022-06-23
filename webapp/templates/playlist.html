@@ -39,7 +39,7 @@
         {% for track in track_list %}
         <tr>
             <th scope="row">{{ track.id }}</th>
-            <td>{{ track.track_name }}</td>
+            <td><img src="{{ track.img_cover }}" alt="..." class="mr-3" width="40"><a href="/track/{{ track.id }}">{{ track.track_name }}</a></td>
             <td>{{ track.artist }}</td>
             <td>{{ track.duration }}</td>
         </tr>
