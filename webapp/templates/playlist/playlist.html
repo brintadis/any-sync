@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table table-striped mt-5">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название трека</th>
+            <th scope="col">Исполнитель</th>
+            <th scope="col">Длительность</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for track in track_list %}
+        <tr>
+            <th scope="row">{{ track.id }}</th>
+            <td>
+                <img src="{{ track.img_cover }}" alt="..." class="mr-3" width="40">
+                {{ track.track_name }}
+            </td>
+            <td>{{ track.artist }}</td>
+            <td>{{ track.duration }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
