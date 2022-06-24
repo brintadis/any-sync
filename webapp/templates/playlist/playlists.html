@@ -13,7 +13,7 @@
     <tbody>
         {% for playlist in playlists %}
         <tr>
-            <th scope="row">{{ playlist.id }}</th>
+            <th scope="row">{{ loop.index }}</th>
             <td>
                 <img src="{{ playlist.img_cover }}" alt="..." class="mr-3" width="40">
                 <a href="/playlist/playlist/{{ playlist.id }}">{{ playlist.playlist_name }}</a>
