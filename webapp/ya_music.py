@@ -1,4 +1,4 @@
-from webapp.model import db
+from webapp.db import db
 from webapp.playlist.models import Playlist, Track
 
 from yandex_music import Client

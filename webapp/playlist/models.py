@@ -1,4 +1,4 @@
-from webapp.model import db
+from webapp.db import db
 
 
 class Track(db.Model):

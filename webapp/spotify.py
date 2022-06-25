@@ -1,7 +1,7 @@
 import spotipy
 import os
 
-from webapp.model import db
+from webapp.db import db
 from webapp.playlist.models import Playlist, Track
 
 from spotipy.oauth2 import SpotifyClientCredentials

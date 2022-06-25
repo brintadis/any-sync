@@ -1,9 +1,8 @@
-import os
-
 from flask import Flask, render_template
 from flask_login import LoginManager
+from flask_migrate import Migrate
 
-from webapp.model import db
+from webapp.db import db
 from webapp.admin.views import blueprint as admin_blueprint
 from webapp.playlist.views import blueprint as playlist_blueprint
 from webapp.user.models import User
@@ -14,9 +13,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
     db.init_app(app)
-
-    SECRET_KEY = os.urandom(32)
-    app.config['SECRET_KEY'] = SECRET_KEY
+    migrate = Migrate(app, db)
 
     login_manager = LoginManager()
     login_manager.init_app(app)

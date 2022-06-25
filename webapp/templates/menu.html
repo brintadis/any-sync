@@ -1,39 +1,57 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">AnySync</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/">Главная</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Возможности</a>
-        </li>
-        <li class="nav-item dropdown disabled">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            TESTING
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/playlist">Cтраница с формой</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/playlist/playlists">Все плейлисты</a>
-          </div>
-        </li>
-      </ul>
-      <ul class="navbar-nav mr-right">
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Войти</button>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Регистрация</button>
-            </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+	<a class="navbar-brand" href="/">AnySync</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="/">Главная</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Возможности</a>
+			</li>
+			<li class="nav-item dropdown disabled">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					TESTING
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="/playlist">Cтраница с формой</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="/playlist/playlists">Все плейлисты</a>
+				</div>
+			</li>
+		</ul>
+		<ul class="navbar-nav mr-right">
+			{% if current_user.is_authenticated %}
+				<li class="nav-item">
+					<span class="nav-link">Привет, {{ current_user.username }}</span>
+				</li>
+				{% if current_user.is_admin %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('admin.admin_index') }}">
+							<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Админка</button>
+						</a>
+					</li>
+				{% endif %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('user.logout') }}">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Выйти</button>
+					</a>
+				</li>
+			{% else %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('user.login') }}">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Войти</button>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('user.register') }}">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Регистрация</button>
+					</a>
+				</li>
+			{% endif %}
+		</ul>
+	</div>
+</nav>
