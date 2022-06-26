@@ -1,21 +1,28 @@
 import requests
 
+from yandex_music import Client
+from datetime import timedelta, datetime
 from PIL import Image
 
+from webapp.ya_music.collage_maker import make_collage
 from webapp.db import db
 from webapp.playlist.models import Playlist, Track
 
-from yandex_music import Client
-from datetime import timedelta, datetime
-
 
 def get_collage_items(list_images):
+    """Parse an image list with url equal to `url` and save it.
+        \nReturn a `list` of img paths.
+    """
     name_num = 1
-    for i in list_images:
-        resp = requests.get(i, stream=True).raw
+    img_path_list = []
+    for img in list_images:
+        resp = requests.get(img, stream=True).raw
         img = Image.open(resp, mode='r')
-        img.save(f'images/pict{name_num}.png', 'png')
+        path_to_save = f'webapp/images/temp/pict{name_num}.png'
+        img.save(path_to_save, 'png')
+        img_path_list.append(path_to_save)
         name_num += 1
+    return img_path_list
 
 
 def get_playlist_ya(url):
@@ -34,7 +41,9 @@ def get_playlist_ya(url):
             img_cover = f'https://{img_cover}'
             list_images.append(img_cover)
 
-        get_collage_items(list_images)
+        print(list_images)
+        # TODO Указать верный путь для создания collage
+        make_collage(get_collage_items(list_images))
 
     else:
         img_cover = str(playlist_playlist.cover['uri']).replace('%%', '200x200')

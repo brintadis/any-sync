@@ -4,8 +4,8 @@ from flask import render_template, redirect
 from webapp.playlist.models import Playlist, Track
 from webapp.playlist.forms import PlaylistLinkForm
 
-from webapp.ya_music import get_playlist_ya
-from webapp.spotify import get_playlist_by_id
+from webapp.ya_music.ya_music import get_playlist_ya
+from webapp.spotify.spotify import get_playlist_by_id
 
 blueprint = Blueprint('playlist', __name__, url_prefix='/playlist')
 
@@ -34,7 +34,7 @@ def get_playlist():
 @blueprint.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
 def playlist(playlist_id):
     title = 'Треклист плейлиста'
-    current_playlist = Playlist.query.filter(Playlist.id == playlist_id).first(0)
+    current_playlist = Playlist.query.filter(Playlist.id == playlist_id).first()
     print(current_playlist)
     track_list = Track.query.filter(Track.playlist == playlist_id)
     return render_template(
