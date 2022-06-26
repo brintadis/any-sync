@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="row mt-3">
-	<div class="col-8">
+	<div class="col">
 		<form action="" method="post">
 			{{ form.hidden_tag() }}
 			<div class="form-group">
@@ -13,12 +13,21 @@
 			</div>
 		</form>
 	</div>
-	<div class="col-3">
-		<div class="list-group">
-			<p class=" mb-2">Доступные музыкальные сервисы:</p>
-			<a href="https://www.spotify.com/" class="list-group-item list-group-item-action list-group-item-dark">Spotify</a>
-			<a href="https://music.yandex.ru/" class="list-group-item list-group-item-action list-group-item-dark">Yandex Music</a>
-			<a href="https://music.apple.com/" class="list-group-item list-group-item-action disabled">В разработке Apple Music</a>
+	<div class="col-5 text-center mx-auto">
+		<div class="list-group list-group-flush">
+			<p class="list-group-item">Доступные музыкальные сервисы:</p>
+			<a href="https://www.spotify.com/" class="list-group-item list-group-item-action">
+				<i class="fa-brands fa-spotify pr-3"></i>Spotify
+			</a>
+			<a href="https://music.yandex.ru/" class="list-group-item list-group-item-action">
+				<i class="fa-brands fa-yandex pr-3"></i>Yandex Music
+			</a>
+			<span class="list-group-item list-group-item-action disabled">
+				В разработке:
+			</span>
+			<a href="https://music.apple.com/" class="list-group-item list-group-item-action disabled">
+				<i class="fa-brands fa-itunes pr-3"></i>Apple Music
+			</a>
 		</div>
 	</div>
 </div>
