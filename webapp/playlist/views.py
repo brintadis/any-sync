@@ -34,5 +34,12 @@ def get_playlist():
 @blueprint.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
 def playlist(playlist_id):
     title = 'Треклист плейлиста'
+    current_playlist = Playlist.query.filter(Playlist.id == playlist_id).first(0)
+    print(current_playlist)
     track_list = Track.query.filter(Track.playlist == playlist_id)
-    return render_template('playlist/playlist.html', page_title=title, track_list=track_list)
+    return render_template(
+        'playlist/playlist.html',
+        page_title=title,
+        track_list=track_list,
+        current_playlist=current_playlist
+    )

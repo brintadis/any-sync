@@ -1,8 +1,21 @@
+import requests
+
+from PIL import Image
+
 from webapp.db import db
 from webapp.playlist.models import Playlist, Track
 
 from yandex_music import Client
 from datetime import timedelta, datetime
+
+
+def get_collage_items(list_images):
+    name_num = 1
+    for i in list_images:
+        resp = requests.get(i, stream=True).raw
+        img = Image.open(resp, mode='r')
+        img.save(f'images/pict{name_num}.png', 'png')
+        name_num += 1
 
 
 def get_playlist_ya(url):
@@ -15,8 +28,14 @@ def get_playlist_ya(url):
     owner_name = playlist_playlist.owner['name']
 
     if playlist_playlist.cover['uri'] is None:
-        img_cover = playlist_playlist.cover.items_uri[0].replace('%%', '200x200')
-        img_cover = f'https://{img_cover}'
+        list_images = []
+        for cover in playlist_playlist.cover.items_uri:
+            img_cover = cover.replace('%%', '200x200')
+            img_cover = f'https://{img_cover}'
+            list_images.append(img_cover)
+
+        get_collage_items(list_images)
+
     else:
         img_cover = str(playlist_playlist.cover['uri']).replace('%%', '200x200')
         img_cover = f'https://{img_cover}'

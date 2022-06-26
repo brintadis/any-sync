@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h2 class="mt-3">{{ page_title }}: {{ current_playlist.playlist_name }}</h2>
 <table class="table table-striped mt-5">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
             <th scope="col">Название трека</th>

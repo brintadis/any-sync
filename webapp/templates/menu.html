@@ -26,7 +26,9 @@
 		<ul class="navbar-nav mr-right">
 			{% if current_user.is_authenticated %}
 				<li class="nav-item">
-					<span class="nav-link">Привет, {{ current_user.username }}</span>
+					<a class="nav-link" style="margin: 7px;">
+					Привет, {{ current_user.username }}
+					</a>
 				</li>
 				{% if current_user.is_admin %}
 					<li class="nav-item">
