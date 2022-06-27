@@ -41,9 +41,9 @@ def get_playlist_ya(url):
             img_cover = f'https://{img_cover}'
             list_images.append(img_cover)
 
-        print(list_images)
-        # TODO Указать верный путь для создания collage
-        make_collage(get_collage_items(list_images))
+        cover_image_path = f'webapp/images/collage/{user_name}_{kind_playlist}.png'
+        make_collage(get_collage_items(list_images), filename=cover_image_path)
+        img_cover = cover_image_path
 
     else:
         img_cover = str(playlist_playlist.cover['uri']).replace('%%', '200x200')
