@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-UPLOAD_FOLDER = 'webapp/images/collage'
+UPLOAD_FOLDER = 'images/collage'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 basedir = os.path.abspath(os.path.dirname(__file__))

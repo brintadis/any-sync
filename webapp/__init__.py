@@ -32,9 +32,9 @@ def create_app():
         title = "AnySync"
         return render_template('index.html', page_title=title)
 
-    @app.route("/media/<path:path>")
-    def send_media(path):
-        print(app.config['UPLOAD_FOLDER'], path)
-        return send_from_directory(app.config['UPLOAD_FOLDER'], path=path, as_attachment=True)
+    @app.route("/media/<name>")
+    def send_media(name):
+        print(app.config['UPLOAD_FOLDER'], name)
+        return send_from_directory(app.config['UPLOAD_FOLDER'], name)
 
     return app
