@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 from flask_login import LoginManager
 from flask_migrate import Migrate
 
@@ -31,5 +31,10 @@ def create_app():
     def index():
         title = "AnySync"
         return render_template('index.html', page_title=title)
+
+    @app.route("/media/<name>")
+    def send_media(name):
+        print(app.config['UPLOAD_FOLDER'], name)
+        return send_from_directory(app.config['UPLOAD_FOLDER'], name)
 
     return app

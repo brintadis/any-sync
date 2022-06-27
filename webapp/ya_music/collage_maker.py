@@ -1,10 +1,7 @@
 from PIL import Image
 
-images = [f'img/pict{num}.jpg' for num in range(4)]
-# print(files)
 
-
-def make_collage(images, filename='collage_img.png', width=200, init_height=100):
+def make_collage(images, filename, width=200, init_height=100):
     """
     Make a collage image with a width equal to `width` from `images` and save to `filename`.
     """
@@ -72,6 +69,3 @@ def make_collage(images, filename='collage_img.png', width=200, init_height=100)
                 x += img.size[0] + margin_size
             y += int(init_height / coef) + margin_size
     collage_image.save(filename)
-
-
-make_collage(images=images)

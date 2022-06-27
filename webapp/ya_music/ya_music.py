@@ -1,8 +1,12 @@
 import requests
 
-from yandex_music import Client
+from flask import url_for
+
+from random import shuffle
 from datetime import timedelta, datetime
+
 from PIL import Image
+from yandex_music import Client
 
 from webapp.ya_music.collage_maker import make_collage
 from webapp.db import db
@@ -40,10 +44,26 @@ def get_playlist_ya(url):
             img_cover = cover.replace('%%', '200x200')
             img_cover = f'https://{img_cover}'
             list_images.append(img_cover)
+        
+        if len(list_images) == 1:
+            img_cover = list_images[0]
+            print(list_images)
 
-        print(list_images)
-        # TODO Указать верный путь для создания collage
-        make_collage(get_collage_items(list_images))
+        elif len(list_images) == 2:
+            list_images += list_images
+            print(list_images)
+            shuffle(list_images)
+
+        elif len(list_images) == 3:
+            list_images.append(list_images[0])
+            print(list_images)
+
+        img_name = f'{user_name}_{kind_playlist}.png'
+        cover_image_path = f'webapp/images/collage/{img_name}'
+        if len(list_images) != 1:
+            make_collage(get_collage_items(list_images), filename=cover_image_path)
+            img_cover = url_for('send_media', name=img_name)
+        # img_cover = f'/media/{img_name}'
 
     else:
         img_cover = str(playlist_playlist.cover['uri']).replace('%%', '200x200')
