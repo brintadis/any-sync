@@ -1,5 +1,5 @@
 import requests
-
+import os
 from flask import url_for
 
 from random import shuffle
@@ -66,6 +66,16 @@ def get_playlist_ya(url):
                 filename=cover_image_path
             )
             img_cover = url_for('send_media', name=img_name)
+
+        if os.path.isfile('webapp/images/temp/pict1.png'):
+            os.remove('webapp/images/temp/pict1.png')
+        if os.path.isfile('webapp/images/temp/pict2.png'):
+            os.remove('webapp/images/temp/pict2.png')
+        if os.path.isfile('webapp/images/temp/pict3.png'):
+            os.remove('webapp/images/temp/pict3.png')
+        if os.path.isfile('webapp/images/temp/pict4.png'):
+            os.remove('webapp/images/temp/pict4.png')
+
     else:
         img_cover = str(
             playlist_playlist.cover['uri']).replace('%%', '200x200')
