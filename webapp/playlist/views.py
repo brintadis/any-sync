@@ -21,22 +21,34 @@ def test():
         elif 'yandex' in url_form.link.data:
             new_playlist = get_playlist_ya(url_form.link.data)
             return redirect(f'playlist/{new_playlist.id}')
-    return render_template('playlist/test.html', page_title=title, form=url_form)
+
+    return render_template(
+        'playlist/test.html',
+        page_title=title,
+        form=url_form
+    )
 
 
 @blueprint.route("/playlists")
 def get_playlist():
     title = "Список плейлистов"
     playlists = Playlist.query.all()
-    return render_template('playlist/playlists.html', page_title=title, playlists=playlists)
+
+    return render_template(
+        'playlist/playlists.html',
+        page_title=title,
+        playlists=playlists
+    )
 
 
 @blueprint.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
 def playlist(playlist_id):
     title = 'Треклист плейлиста'
-    current_playlist = Playlist.query.filter(Playlist.id == playlist_id).first()
-    print(current_playlist)
+    current_playlist = Playlist.query.filter(
+        Playlist.id == playlist_id
+        ).first()
     track_list = Track.query.filter(Track.playlist == playlist_id)
+
     return render_template(
         'playlist/playlist.html',
         page_title=title,

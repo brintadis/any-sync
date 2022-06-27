@@ -44,7 +44,7 @@ def get_playlist_ya(url):
             img_cover = cover.replace('%%', '200x200')
             img_cover = f'https://{img_cover}'
             list_images.append(img_cover)
-        
+
         if len(list_images) == 1:
             img_cover = list_images[0]
             print(list_images)
@@ -61,15 +61,23 @@ def get_playlist_ya(url):
         img_name = f'{user_name}_{kind_playlist}.png'
         cover_image_path = f'webapp/images/collage/{img_name}'
         if len(list_images) != 1:
-            make_collage(get_collage_items(list_images), filename=cover_image_path)
+            make_collage(
+                get_collage_items(list_images),
+                filename=cover_image_path
+            )
             img_cover = url_for('send_media', name=img_name)
-        # img_cover = f'/media/{img_name}'
-
     else:
-        img_cover = str(playlist_playlist.cover['uri']).replace('%%', '200x200')
+        img_cover = str(
+            playlist_playlist.cover['uri']).replace('%%', '200x200')
         img_cover = f'https://{img_cover}'
 
-    return save_playlist(playlist_name, owner_name, playlist_playlist.tracks, kind_playlist, img_cover)
+    return save_playlist(
+        playlist_name,
+        owner_name,
+        playlist_playlist.tracks,
+        kind_playlist,
+        img_cover
+    )
 
 
 def save_playlist(playlist_name, owner_name, tracks, kind_playlist, img_cover):
@@ -84,7 +92,8 @@ def save_playlist(playlist_name, owner_name, tracks, kind_playlist, img_cover):
 
     for track in tracks:
         duration_ms = track['track']['duration_ms']
-        duration_and_random_date = datetime(1970, 1, 1) + timedelta(milliseconds=duration_ms)
+        duration_and_random_date = datetime(1970, 1, 1) + \
+            timedelta(milliseconds=duration_ms)
         duration = duration_and_random_date.strftime("%M:%S")
 
         img_cover = str(track['track']['cover_uri']).replace('%%', '200x200')

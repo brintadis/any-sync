@@ -11,8 +11,15 @@ from datetime import timedelta, datetime
 CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = "http://example.com"
-SCOPE = ('''user-library-read, playlist-read-private, playlist-modify-private, playlist-modify-public, user-read-private,
-          user-library-modify, user-library-read''')
+SCOPE = (
+    '''user-library-read,
+    playlist-read-private,
+    playlist-modify-private,
+    playlist-modify-public,
+    user-read-private,
+    user-library-modify,
+    user-library-read'''
+)
 
 sp = spotipy.Spotify(
     auth_manager=SpotifyClientCredentials(
@@ -60,7 +67,8 @@ def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
 
     for track in tracks:
         duration_ms = int(track['track']['duration_ms'])
-        duration_and_random_date = datetime(1970, 1, 1) + timedelta(milliseconds=duration_ms)
+        duration_and_random_date = datetime(1970, 1, 1) + \
+            timedelta(milliseconds=duration_ms)
         duration = duration_and_random_date.strftime("%M:%S")
 
         new_track = Track(
