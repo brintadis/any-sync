@@ -3,7 +3,8 @@ from PIL import Image
 
 def make_collage(images, filename, width=200, init_height=100):
     """
-    Make a collage image with a width equal to `width` from `images` and save to `filename`.
+    Make a collage image with a width equal to `width`
+    from `images` and save to `filename`.
     """
     if not images:
         print('No images for collage found!')
@@ -32,7 +33,8 @@ def make_collage(images, filename, width=200, init_height=100):
         # finally add the last line with images
         coefs_lines.append((float(x) / width, images_line))
 
-        # compact the lines, by reducing the `init_height`, if any with one or less images
+        # compact the lines, by reducing the `init_height`,
+        # if any with one or less images
         if len(coefs_lines) <= 1:
             break
         if any(map(lambda c: len(c[1]) <= 1, coefs_lines)):
@@ -58,12 +60,19 @@ def make_collage(images, filename, width=200, init_height=100):
             x = 0
             for img_path in imgs_line:
                 img = Image.open(img_path)
-                # if need to enlarge an image - use `resize`, otherwise use `thumbnail`, it's faster
+                # if need to enlarge an image - use `resize`,
+                # otherwise use `thumbnail`, it's faster
                 k = (init_height / coef) / img.size[1]
                 if k > 1:
-                    img = img.resize((int(img.size[0] * k), int(img.size[1] * k)), Image.ANTIALIAS)
+                    img = img.resize(
+                        (int(img.size[0] * k), int(img.size[1] * k)),
+                        Image.ANTIALIAS
+                    )
                 else:
-                    img.thumbnail((int(width / coef), int(init_height / coef)), Image.ANTIALIAS)
+                    img.thumbnail(
+                        (int(width / coef), int(init_height / coef)),
+                        Image.ANTIALIAS
+                    )
                 if collage_image:
                     collage_image.paste(img, (int(x), int(y)))
                 x += img.size[0] + margin_size
