@@ -1,5 +1,7 @@
 import requests
 import os
+import shutil
+
 from flask import url_for
 
 from random import shuffle
@@ -67,14 +69,10 @@ def get_playlist_ya(url):
             )
             img_cover = url_for('send_media', name=img_name)
 
-        if os.path.isfile('webapp/images/temp/pict1.png'):
-            os.remove('webapp/images/temp/pict1.png')
-        if os.path.isfile('webapp/images/temp/pict2.png'):
-            os.remove('webapp/images/temp/pict2.png')
-        if os.path.isfile('webapp/images/temp/pict3.png'):
-            os.remove('webapp/images/temp/pict3.png')
-        if os.path.isfile('webapp/images/temp/pict4.png'):
-            os.remove('webapp/images/temp/pict4.png')
+        # Remove temp dir with temp imgs.
+        if os.path.isdir('webapp/images/temp'):
+            shutil.rmtree('webapp/images/temp')
+            os.mkdir('webapp/images/temp')
 
     else:
         img_cover = str(
