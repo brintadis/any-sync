@@ -1,3 +1,4 @@
+from flask_login import current_user
 import requests
 import os
 import shutil
@@ -93,7 +94,8 @@ def save_playlist(playlist_name, owner_name, tracks, kind_playlist, img_cover):
         playlist_name=playlist_name,
         owner_name=owner_name,
         kind=kind_playlist,
-        img_cover=img_cover
+        img_cover=img_cover,
+        user=current_user.id
     )
     db.session.add(new_playlist)
     db.session.commit()

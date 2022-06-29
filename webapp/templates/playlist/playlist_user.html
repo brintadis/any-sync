@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mt-3">Только для авторизованных пользователей</h2>
+<table class="table table-striped mt-5">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название плейлиста</th> 
+            <th scope="col">Количество треков</th>
+            <th scope="col">Автор</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for playlist in playlists %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>
+                <img src="{{ playlist.img_cover }}" alt="..." class="mr-3" width="40">
+                <a href="/playlist/playlist/{{ playlist.id }}">{{ playlist.playlist_name }}</a>
+            </td>
+            <td>{{ playlist.count_tracks() }}</td>
+            <td>{{ playlist.owner_name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
