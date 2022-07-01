@@ -15,7 +15,7 @@ class Track(db.Model):
 
 class Playlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     playlist_name = db.Column(db.String, nullable=False)
     owner_name = db.Column(db.String, nullable=False)
     last_update = db.Column(db.DateTime, nullable=True)

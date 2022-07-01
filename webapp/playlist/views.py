@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, flash
 from flask import render_template, redirect
 from flask_login import current_user, login_required
 
@@ -15,13 +15,17 @@ blueprint = Blueprint('playlist', __name__, url_prefix='/playlist')
 def test():
     title = "AnySync"
     url_form = PlaylistLinkForm()
-    if url_form.validate_on_submit():
-        if 'spotify' in url_form.link.data:
-            new_playlist = get_playlist_by_id(url_form.link.data)
-            return redirect(f'playlist/{new_playlist.id}')
-        elif 'yandex' in url_form.link.data:
-            new_playlist = get_playlist_ya(url_form.link.data)
-            return redirect(f'playlist/{new_playlist.id}')
+
+    try:
+        if url_form.validate_on_submit():
+            if 'spotify' in url_form.link.data:
+                new_playlist = get_playlist_by_id(url_form.link.data)
+                return redirect(f'playlist/{new_playlist.id}')
+            elif 'yandex' in url_form.link.data:
+                new_playlist = get_playlist_ya(url_form.link.data)
+                return redirect(f'playlist/{new_playlist.id}')
+    except AttributeError:
+        flash('Авторизуйтесь прежде чем добавлять плейлист')
 
     return render_template(
         'playlist/test.html',
