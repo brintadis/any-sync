@@ -16,85 +16,114 @@ from webapp.db import db
 from webapp.playlist.models import Playlist, Track
 
 
-def get_collage_items(list_images):
+def get_collage_items(list_image_urls):
     """Parse an image list with url equal to `url` and save it.
-        \nReturn a `list` of img paths.
+
+    Args:
+        list_image_urls (_list_): Img urls
+
+    Returns:
+        _list_: Return a `list` of img paths.
     """
     name_num = 1
     img_path_list = []
-    for img in list_images:
+    os.mkdir(f'webapp/images/temp/{current_user.id}/')
+    for img in list_image_urls:
         resp = requests.get(img, stream=True).raw
         img = Image.open(resp, mode='r')
-        path_to_save = f'webapp/images/temp/pict{name_num}.png'
+        path_to_save = f'webapp/images/temp/{current_user.id}/\
+            pict{name_num}.png'
         img.save(path_to_save, 'png')
         img_path_list.append(path_to_save)
         name_num += 1
     return img_path_list
 
 
+def cover_processing(playlist, username, kind_playlist):
+    """This function processes the cover url and makes a collage.
+
+    Args:
+        playlist: playlist obj from Yandex.
+        username (_str_): Username.
+        kind_playlist (_str_): Yandex playlist id.
+
+    Returns:
+        _str_: return collage url.
+    """
+    list_image_urls = []
+    for cover in playlist.cover.items_uri:
+        img_cover_url = cover.replace('%%', '200x200')
+        img_cover_url = f'https://{img_cover_url}'
+        list_image_urls.append(img_cover_url)
+
+    if len(list_image_urls) == 1:
+        img_cover_url = list_image_urls[0]
+
+    elif len(list_image_urls) == 2:
+        list_image_urls += list_image_urls
+        shuffle(list_image_urls)
+
+    elif len(list_image_urls) == 3:
+        list_image_urls.append(list_image_urls[0])
+
+    img_name = f'{username}_{kind_playlist}.png'
+    collage_image_path = f'webapp/images/collage/{img_name}'
+    if len(list_image_urls) != 1:
+        make_collage(
+            images=get_collage_items(list_image_urls),
+            filename=collage_image_path
+        )
+        img_cover_url = url_for('send_media', name=img_name)
+
+    # Remove temp dir with temp imgs.
+    if os.path.isdir('webapp/images/temp'):
+        shutil.rmtree(f'webapp/images/temp/{current_user.id}')
+
+    return img_cover_url
+
+
 def get_playlist_ya(url):
     """Get full information about playlist by it url and add it into our DB.
+
+    Args:
+        url (_str_): Full url to a yandex playlist.
+
+    Returns:
+        function: Return saved playlist function.
     """
-    user_name = url.split('/')[4]
+    username = url.split('/')[4]
     kind_playlist = url.split('/')[-1]
-    playlist_playlist = Client().users_playlists(int(kind_playlist), user_name)
-    playlist_name = playlist_playlist.title
-    owner_name = playlist_playlist.owner['name']
+    playlist = Client().users_playlists(int(kind_playlist), username)
+    playlist_name = playlist.title
+    owner_name = playlist.owner['name']
 
-    if playlist_playlist.cover['uri'] is None:
-        list_images = []
-        for cover in playlist_playlist.cover.items_uri:
-            img_cover = cover.replace('%%', '200x200')
-            img_cover = f'https://{img_cover}'
-            list_images.append(img_cover)
-
-        if len(list_images) == 1:
-            img_cover = list_images[0]
-            print(list_images)
-
-        elif len(list_images) == 2:
-            list_images += list_images
-            print(list_images)
-            shuffle(list_images)
-
-        elif len(list_images) == 3:
-            list_images.append(list_images[0])
-            print(list_images)
-
-        img_name = f'{user_name}_{kind_playlist}.png'
-        cover_image_path = f'webapp/images/collage/{img_name}'
-        if len(list_images) != 1:
-            make_collage(
-                get_collage_items(list_images),
-                filename=cover_image_path
-            )
-            img_cover = url_for('send_media', name=img_name)
-
-        # Remove temp dir with temp imgs.
-        if os.path.isdir('webapp/images/temp'):
-            shutil.rmtree('webapp/images/temp')
-            os.mkdir('webapp/images/temp')
-
+    if playlist.cover['uri'] is None:
+        img_cover_url = cover_processing(
+            playlist=playlist,
+            username=username,
+            kind_playlist=kind_playlist
+        )
     else:
-        img_cover = str(
-            playlist_playlist.cover['uri']).replace('%%', '200x200')
-        img_cover = f'https://{img_cover}'
+        img_cover_url = str(
+            playlist.cover['uri']).replace('%%', '200x200')
+        img_cover_url = f'https://{img_cover_url}'
 
+    print(type(save_playlist))
     return save_playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
-        tracks=playlist_playlist.tracks,
+        tracks=playlist.tracks,
         kind_playlist=kind_playlist,
-        img_cover=img_cover
+        img_cover_url=img_cover_url
     )
 
 
-def save_playlist(playlist_name, owner_name, tracks, kind_playlist, img_cover):
+def save_playlist(playlist_name, owner_name, tracks, kind_playlist, img_cover_url):  # noqa: E501
     new_playlist = Playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
         kind=kind_playlist,
-        img_cover=img_cover,
+        img_cover=img_cover_url,
         user=current_user.id
     )
     db.session.add(new_playlist)
@@ -106,14 +135,16 @@ def save_playlist(playlist_name, owner_name, tracks, kind_playlist, img_cover):
             timedelta(milliseconds=duration_ms)
         duration = duration_and_random_date.strftime("%M:%S")
 
-        img_cover = str(track['track']['cover_uri']).replace('%%', '200x200')
-        img_cover = f'https://{img_cover}'
+        img_cover_url = str(
+            track['track']['cover_uri']).replace('%%', '200x200')
+        img_cover_url = f'https://{img_cover_url}'
 
         new_track = Track(
             playlist=new_playlist.id,
             artist=track['track']['artists'][0]['name'],
             track_name=track['track']['title'],
-            duration=duration, img_cover=img_cover
+            duration=duration,
+            img_cover=img_cover_url
         )
         db.session.add(new_track)
     db.session.commit()
