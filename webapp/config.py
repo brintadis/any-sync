@@ -12,6 +12,6 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-REMEMBER_COOKIE_DURATION = timedelta(days=5)
+REMEMBER_COOKIE_DURATION = timedelta(days=30)
 
 SECRET_KEY = os.urandom(32)
