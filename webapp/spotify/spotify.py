@@ -1,6 +1,8 @@
 import spotipy
 import os
 
+from flask_login import current_user
+
 from webapp.db import db
 from webapp.playlist.models import Playlist, Track
 
@@ -59,7 +61,8 @@ def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
     new_playlist = Playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
-        img_cover=img_cover
+        img_cover=img_cover,
+        user=current_user.id
     )
 
     db.session.add(new_playlist)
