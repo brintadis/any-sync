@@ -1,9 +1,9 @@
-from flask_login import current_user
 import requests
 import os
 import shutil
 
 from flask import url_for
+from flask_login import current_user
 
 from random import shuffle
 from datetime import timedelta, datetime
@@ -81,11 +81,11 @@ def get_playlist_ya(url):
         img_cover = f'https://{img_cover}'
 
     return save_playlist(
-        playlist_name,
-        owner_name,
-        playlist_playlist.tracks,
-        kind_playlist,
-        img_cover
+        playlist_name=playlist_name,
+        owner_name=owner_name,
+        tracks=playlist_playlist.tracks,
+        kind_playlist=kind_playlist,
+        img_cover=img_cover
     )
 
 
