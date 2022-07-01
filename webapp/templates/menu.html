@@ -19,9 +19,9 @@
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<a class="dropdown-item" href="/playlist">Cтраница с формой</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="/playlist/playlists">Все плейлисты</a>
+					<a class="dropdown-item" href="{{ url_for('playlist.all_playlists') }}">Все плейлисты</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="/playlist/playlist_user">User_playlist</a>
+					<a class="dropdown-item" href="{{ url_for('playlist.playlist_user', user_id=current_user.id) }}">Мои плейлисты</a>
 				</div>
 			</li>
 		</ul>

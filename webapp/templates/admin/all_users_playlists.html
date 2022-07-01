@@ -12,12 +12,12 @@
     <tbody>
         {% for user in users %}
         <tr>
-            <th scope="row">{{ loop.index }}</th>
+            <td scope="row">{{ loop.index }}</td>
             <td>
-                {{ user.username }}
+                <a href="{{ url_for('playlist.playlist_user', user_id=user.id) }}">{{ user.username }}</a>
             </td>
             <td>
-                {{ playlists_count[loop.index-1] }}
+                {{ user.count_playlist() }}
             </td>
         </tr>
         {% endfor %}
