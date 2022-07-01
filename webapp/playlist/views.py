@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import render_template, redirect
-from flask_login import current_user, login_required
+from flask_login import login_required
 
 from webapp.playlist.models import Playlist, Track
 from webapp.playlist.forms import PlaylistLinkForm
@@ -33,7 +33,7 @@ def test():
 
 
 @blueprint.route("/playlists")
-def get_playlist():
+def all_playlists():
     title = "Список плейлистов"
     playlists = Playlist.query.all()
 
@@ -60,11 +60,11 @@ def playlist(playlist_id):
     )
 
 
-@blueprint.route("/playlist_user", methods=['GET', 'POST'])
+@blueprint.route("/playlist_user/<user_id>", methods=['GET', 'POST'])
 @login_required
-def playlist_user():
-    title = "User playlist"
-    playlists = Playlist.query.filter(Playlist.user == current_user.id)
+def playlist_user(user_id):
+    title = "Мои плейлисты"
+    playlists = Playlist.query.filter(Playlist.user == user_id)
     return render_template(
         'playlist/playlist_user.html',
         page_title=title,

@@ -14,7 +14,7 @@
     <tbody>
         {% for track in track_list %}
         <tr>
-            <th scope="row">{{ loop.index }}</th>
+            <td scope="row">{{ loop.index }}</td>
             <td>
                 <img src="{{ track.img_cover }}" alt="..." class="mr-3" width="40">
                 {{ track.track_name }}
