@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mt-5 mb-5 text-center">
+    <div class="col">
+        <h2 class="mb-3">AnySync</h2>
+        <a href="{{ url_for('playlist.test') }}" type="button" class="btn btn-secondary">Добавить новый плейлист</a>
+        <a href="#" type="button" class="btn btn-secondary">Синхронизация плейлистов</a>
+    </div>
+</div>
+<hr>
+<h4 class="text-center">Мои плейлисты</h4>
+<hr>
+<div class="row mt-3">
+    {% for playlist in playlists %}
+        <div class="col mb-3" style="align-items: center;">
+            <div class="card text-center" style="width: 18rem;">
+                <img class="card-img-top" src="{{ playlist.img_cover }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ playlist.playlist_name }}</h5>
+                    <p class="card-text">Количество треков: {{ playlist.count_tracks() }}</p>
+                    <p class="card-text">Создатель плейлиста: {{ playlist.owner_name }}</p>
+                    <p class="card-text">Дата создания: 02-07-2022</p>
+                    <div class="row">
+                        <div class="col">
+                            <a href="/playlist/playlist/{{ playlist.id }}" class="btn btn-dark">Открыть</a>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group dropup">
+                                <button type="button" class="p-2 btn btn-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <!-- Dropdown menu links -->
+                                    <a class="dropdown-item" href="#">Редактировать</a>
+                                    <a class="dropdown-item" href="#">Удалить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

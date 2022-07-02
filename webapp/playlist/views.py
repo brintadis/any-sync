@@ -68,5 +68,6 @@ def playlist_user(user_id):
     return render_template(
         'playlist/playlist_user.html',
         page_title=title,
-        playlists=playlists
+        playlists=playlists,
+        user_id=user_id
     )

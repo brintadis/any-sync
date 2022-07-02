@@ -4,10 +4,24 @@ from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import login_user, logout_user, current_user
 
 from webapp.db import db
+
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
+from webapp.playlist.models import Playlist
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
+
+
+@blueprint.route("/profile")
+def profile():
+    title = 'Мой AnySync'
+    playlists = Playlist.query.filter(Playlist.user == current_user.id)
+
+    return render_template(
+        'user/my_anysync.html',
+        title=title,
+        playlists=playlists
+    )
 
 
 @blueprint.route("/login")

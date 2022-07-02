@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row mt-3">
+<div class="row mt-5">
 	<div class="col">
-		<form action="" method="post">
+		<h4 class="pb-3 text-center">Создание плейлиста</h4>
+		<p class="text-center">Для добавления плейлиста укажите ссылку.</p>
+		<form class="pt-3" action="" method="post">
 			{{ form.hidden_tag() }}
 			<div class="form-group">
 				{{ form.link.label }} {{ form.link() }}
@@ -15,7 +17,7 @@
 	</div>
 	<div class="col-5 text-center mx-auto">
 		<div class="list-group list-group-flush">
-			<p class="list-group-item">Доступные музыкальные сервисы:</p>
+			<h5 class="list-group-item">Доступные музыкальные сервисы:</h5>
 			<a href="https://www.spotify.com/" class="list-group-item list-group-item-action">
 				<i class="fa-brands fa-spotify pr-3"></i>Spotify
 			</a>
