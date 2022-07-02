@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Админка
+<div class="row mt-5 mb-5 text-center">
+    <div class="col">
+        <h4>Общая информация</h4>
+    </div>
+    {% include 'admin/summary_info.html' %}
+</div>
+<h4 class="text-center mb-3">Информация о пользователях</h2>
+<div class="row">
+    {% include 'admin/users_info.html' %}
+</div>
 {% endblock %}

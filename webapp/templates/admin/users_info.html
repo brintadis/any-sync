@@ -1,12 +1,11 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<table class="table table-striped mt-5">
+<table class="table table-striped">
     <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
             <th scope="col">Имя пользователя</th>
             <th scope="col">Количество плейлистов</th>
+            <th scope="col">Email</th>
+            <th scope="col">Дата регистрации</th>
         </tr>
     </thead>
     <tbody>
@@ -19,8 +18,13 @@
             <td>
                 {{ user.count_playlist() }}
             </td>
+            <td>
+                {{ user.email }}
+            </td>
+            <td>
+                {{ user.registration_date }}
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-{% endblock %}
