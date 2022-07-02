@@ -18,3 +18,14 @@ def admin_required(func):
             return redirect(url_for('index'))
         return func(*args, **kwargs)
     return decorated_view
+
+
+def check_confirmed(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if current_user.confirmed is False:
+            flash('Please confirm your account!', 'warning')
+            return redirect(url_for('user.unconfirmed'))
+        return func(*args, **kwargs)
+
+    return decorated_function

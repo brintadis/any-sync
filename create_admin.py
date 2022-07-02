@@ -1,6 +1,6 @@
 from getpass import getpass
 import sys
-
+from datetime import datetime
 from webapp import create_app
 from webapp.db import db
 from webapp.user.models import User
@@ -18,7 +18,8 @@ with app.app_context():
     password2 = getpass('Повторите пароль: ')
     if not password == password2:
         sys.exit(0)
-new_user = User(username=username, role='admin')
+new_user = User(username=username, role='admin',
+                confirmed_on=datetime.now(), confirmed=True)
 new_user.set_password(password)
 
 db.session.add(new_user)
