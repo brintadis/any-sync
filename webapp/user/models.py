@@ -9,9 +9,10 @@ from webapp.playlist.models import Playlist
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(128))
+    password = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(10), index=True)
-    email = db.Column(db.String(50))
+    email = db.Column(db.String(50), nullable=False)
+    registration_date = db.Column(db.String(20), nullable=False)
 
     def __repr__(self):
         return '<User {} id {}>'.format(self.username, self.id)

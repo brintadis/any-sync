@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import login_user, logout_user, current_user
 
@@ -65,7 +67,8 @@ def process_reg():
         new_user = User(
             username=form.username.data,
             email=form.email.data,
-            role='user'
+            role='user',
+            registration_date=datetime.today().strftime('%Y-%d-%m %H:%M:%S')
         )
         new_user.set_password(form.password.data)
         db.session.add(new_user)

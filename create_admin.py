@@ -1,5 +1,6 @@
-from getpass import getpass
 import sys
+from datetime import datetime
+from getpass import getpass
 
 from webapp import create_app
 from webapp.db import db
@@ -14,11 +15,22 @@ with app.app_context():
         print('Такой пользователь уже есть')
         sys.exit(0)
 
+    email = input('Введите email пользователя: ')
+
+    if User.query.filter(User.email == email).count():
+        print('Такой пользователь уже есть')
+        sys.exit(0)
+
     password = getpass('Введите пароль: ')
     password2 = getpass('Повторите пароль: ')
     if not password == password2:
         sys.exit(0)
-new_user = User(username=username, role='admin')
+new_user = User(
+    username=username,
+    role='admin',
+    email=email,
+    registration_date=datetime.today().strftime('%Y-%d-%m %H:%M:%S')
+)
 new_user.set_password(password)
 
 db.session.add(new_user)
