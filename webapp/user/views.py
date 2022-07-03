@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from flask import Blueprint, flash, redirect, render_template, url_for
-from flask_login import login_user, logout_user, current_user
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import login_required, login_user, logout_user, current_user
 
 from webapp.db import db
 
@@ -13,12 +13,34 @@ blueprint = Blueprint('user', __name__, url_prefix='/users')
 
 
 @blueprint.route("/profile")
+@login_required
 def profile():
     title = 'Мой AnySync'
     playlists = Playlist.query.filter(Playlist.user == current_user.id)
 
     return render_template(
         'user/my_anysync.html',
+        title=title,
+        playlists=playlists
+    )
+
+
+@blueprint.route("/sync-playlist")
+@login_required
+def sync_playlist():
+    print(request.values.getlist('playlist'))
+    print(request.values.get('music_service'))
+    return redirect(url_for('user.synchronization'))
+
+
+@blueprint.route("/synchronization")
+@login_required
+def synchronization():
+    title = "Синхронизация плейлистов"
+    playlists = Playlist.query.filter(Playlist.user == current_user.id)
+
+    return render_template(
+        'user/synchronization.html',
         title=title,
         playlists=playlists
     )

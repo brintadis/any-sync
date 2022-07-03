@@ -1,10 +1,51 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<select class="custom-select" multiple>
-    <option selected>Open this select menu</option>
-    <option value="1">One</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
-  </select>
+<h3 class="text-center mt-3 mb-3">AnySync</h3>
+<h4 class="text-center">Для синхронизации выберите плейлисты и музыкальный сервис.</h4>
+<form action="/users/sync-playlist">
+	<table class="table table-striped mt-5">
+	<thead class="thead-dark">
+			<tr>
+				<th scope="col" class="text-center">#</th>
+				<th scope="col">Название плейлиста</th>
+				<th scope="col">Количество треков</th>
+				<th scope="col">Автор</th>
+			</tr>
+	</thead>
+		<tbody>
+			{% for playlist in playlists %}
+			<tr>
+				<td scope="row">
+					<div class="form-check text-center">
+						<input name="playlist" class="form-check-input" type="checkbox" value="{{ playlist.id }}" id="{{ playlist.id }}">
+					</div>
+				</td>
+				<td>
+					<img src="{{ playlist.img_cover }}" alt="..." class="mr-3" width="40">
+					<a href="/playlist/playlist/{{ playlist.id }}">{{ playlist.playlist_name }}</a>
+				</td>
+				<td>{{ playlist.count_tracks() }}</td>
+				<td>{{ playlist.owner_name }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="col mb-3">
+		<p>
+			Теперь выберите музыкальный сервис, в который хотите перенести плейлисты:
+		</p>
+		<div class="custom-control custom-radio mb-3">
+			<input type="radio" id="customRadio1" name="music_service" class="custom-control-input mr-3" value="Spotify">
+			<label class="custom-control-label" for="customRadio1"><i class="fa-brands fa-spotify mr-2"></i>Spotify</label>
+		</div>
+		<div class="custom-control custom-radio">
+			<input type="radio" id="customRadio2" name="music_service" class="custom-control-input mr-3" value="Yandex Music">
+			<label class="custom-control-label" for="customRadio2"><i class="fa-brands fa-yandex pr-2 mr-2"></i>Yandex Music</label>
+		</div>
+	</div>
+	<div class="col mb-5">
+		<button type="submit" class="btn btn-primary">Отправить</button>
+	</div>
+</form>
 {% endblock %}

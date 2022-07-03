@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if playlists.count() > 0 %}
 <h2 class="mt-3">Мои плейлисты</h2>
 <table class="table table-striped mt-5">
     <thead class="thead-dark">
@@ -25,4 +26,7 @@
         {% endfor %}
     </tbody>
 </table>
+{% else %}
+<h4>Нет плейлистов</h4>
+{% endif %}
 {% endblock %}

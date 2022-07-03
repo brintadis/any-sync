@@ -5,7 +5,7 @@
     <div class="col">
         <h2 class="mb-3">AnySync</h2>
         <a href="{{ url_for('playlist.test') }}" type="button" class="btn btn-secondary">Добавить новый плейлист</a>
-        <a href="#" type="button" class="btn btn-secondary">Синхронизация плейлистов</a>
+        <a href="{{ url_for('user.synchronization') }}" type="button" class="btn btn-secondary">Синхронизация плейлистов</a>
     </div>
 </div>
 <hr>
@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ playlist.playlist_name }}</h5>
                     <p class="card-text">Количество треков: {{ playlist.count_tracks() }}</p>
-                    <p class="card-text">Создатель плейлиста: {{ playlist.owner_name }}</p>
+                    <p class="card-text">Создатель плейлиста: <br>{{ playlist.owner_name }}</p>
                     <p class="card-text">Дата создания: 02-07-2022</p>
                     <div class="row">
                         <div class="col">
