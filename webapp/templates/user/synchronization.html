@@ -31,17 +31,32 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<div class="col mb-3">
-		<p>
-			Теперь выберите музыкальный сервис, в который хотите перенести плейлисты:
-		</p>
-		<div class="custom-control custom-radio mb-3">
-			<input type="radio" id="customRadio1" name="music_service" class="custom-control-input mr-3" value="Spotify">
-			<label class="custom-control-label" for="customRadio1"><i class="fa-brands fa-spotify mr-2"></i>Spotify</label>
+	<div class="row">
+		<div class="col mb-3">
+			<p>
+				Теперь выберите музыкальный сервис, в который хотите перенести плейлисты:
+			</p>
+			<div class="custom-control custom-radio mb-3">
+				<input type="radio" id="customRadio1" name="music_service" class="custom-control-input mr-3" value="Spotify">
+				<label class="custom-control-label" for="customRadio1"><i class="fa-brands fa-spotify mr-2"></i>Spotify</label>
+			</div>
+			<div class="custom-control custom-radio">
+				<input type="radio" id="customRadio2" name="music_service" class="custom-control-input mr-3" value="Yandex Music">
+				<label class="custom-control-label" for="customRadio2"><i class="fa-brands fa-yandex pr-2 mr-2"></i>Yandex Music</label>
+			</div>
 		</div>
-		<div class="custom-control custom-radio">
-			<input type="radio" id="customRadio2" name="music_service" class="custom-control-input mr-3" value="Yandex Music">
-			<label class="custom-control-label" for="customRadio2"><i class="fa-brands fa-yandex pr-2 mr-2"></i>Yandex Music</label>
+		<div class="col mb-3">
+			<p>
+				Сделать плейлист публичным?
+			</p>
+			<div class="custom-control custom-radio mb-3">
+				<input type="radio" id="customRadio3" name="public_playlist" class="custom-control-input mr-3" value="True">
+				<label class="custom-control-label" for="customRadio3">Да</label>
+			</div>
+			<div class="custom-control custom-radio">
+				<input type="radio" id="customRadio4" name="public_playlist" class="custom-control-input mr-3" value="False">
+				<label class="custom-control-label" for="customRadio4">Нет</label>
+			</div>
 		</div>
 	</div>
 	<div class="col mb-5">

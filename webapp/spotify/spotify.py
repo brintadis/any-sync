@@ -6,13 +6,13 @@ from flask_login import current_user
 from webapp.db import db
 from webapp.playlist.models import Playlist, Track
 
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from datetime import timedelta, datetime
 
 # Client Credentials Flow and Scope settings
 CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
-REDIRECT_URI = "http://example.com"
+REDIRECT_URI = "http://127.0.0.1:5000/users/spotifyoauth"
 SCOPE = (
     '''user-library-read,
     playlist-read-private,
@@ -23,21 +23,17 @@ SCOPE = (
     user-library-read'''
 )
 
-sp = spotipy.Spotify(
-    auth_manager=SpotifyClientCredentials(
-        # scope=SCOPE,
-        # redirect_uri=REDIRECT_URI,
-        client_id=CLIENT_ID,
-        client_secret=CLIENT_SECRET,
-        # show_dialog=True,
-        # cache_path="cache/token.txt"
-    )
-)
 
-
-def get_playlist_by_id(playlist_url, sp=sp):
-    """Get full information about playlist by it id.
+def get_playlist_by_id(playlist_url):
+    """Get full information about playlist by it url.
     """
+    sp = spotipy.Spotify(
+        auth_manager=SpotifyClientCredentials(
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET
+        )
+    )
+
     playlist_id = playlist_url.split('/')[-1]
 
     if '?' in playlist_id:
@@ -55,6 +51,53 @@ def get_playlist_by_id(playlist_url, sp=sp):
         tracks=playlist['tracks']['items'],
         id_playlist=playlist_id
     )
+
+
+def sync_to_spotify(tracks, playlist_to_create, public_playlist):
+    sp = spotipy.Spotify(
+        auth_manager=SpotifyOAuth(
+            scope=SCOPE,
+            redirect_uri=REDIRECT_URI,
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET,
+            show_dialog=True,
+            cache_path="webapp/spotify/token.txt"
+        )
+    )
+    user_id = sp.current_user()["id"]
+
+    # Searching Spotify for songs by title and artist
+    songs_uris = []
+    for track in tracks:
+        search_results = sp.search(
+            q="artist:" + track.artist + " track:" + track.track_name,
+            type="track"
+        )
+        try:
+            uri = search_results["tracks"]["items"][0]["uri"]
+            songs_uris.append(uri)
+        except IndexError:
+            print(
+                f"{track.track_name} by {track.artist}\
+                doesn't exist in Spotify. Skipped."
+            )
+    print('as', songs_uris)
+
+    # Creating a private playlist
+    playlist = sp.user_playlist_create(
+        user=user_id,
+        name=playlist_to_create.playlist_name,
+        public=public_playlist
+    )
+
+    # Updating an exist playlist's cover
+    # sp.playlist_upload_cover_image(
+    #     playlist_id=playlist["id"],
+    #     image_b64=playlist_to_create.img_cover
+    # )
+
+    # Adding songs found to the new playlist
+    sp.playlist_add_items(playlist_id=playlist["id"], items=songs_uris)
 
 
 def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
