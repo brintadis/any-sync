@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user, current_user
@@ -9,7 +10,7 @@ from webapp.spotify.spotify import sync_to_spotify
 
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-from webapp.playlist.models import Playlist, Track
+from webapp.playlist.models import Playlist
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
 
@@ -30,33 +31,26 @@ def profile():
 @blueprint.route("/spotifyoauth")
 @login_required
 def spotifyoauth():
-    return redirect(url_for('user.sync_playlist'))
+    token = request.args.get('code')
+    print(token)
+    os.environ["token"] = token
+    print(os.getenv("token"))
+
+    return redirect(url_for('user.synchronization'))
 
 
 @blueprint.route("/sync-playlist")
 @login_required
 def sync_playlist():
     playlist_ids = request.values.getlist('playlist')
-    # if len(playlist_ids) == 0:
-    #     redire
     music_service = request.values.get('music_service')
     public_playlist = request.values.get('public_playlist') == 'True'
 
     if music_service == 'Spotify':
-        for playlist_id in playlist_ids:
-            print(playlist_id)
-            playlist_to_create = Playlist.query.filter(
-                Playlist.id == int(playlist_id)
-            ).first()
-            tracks = Track.query.filter(
-                Track.playlist == int(playlist_id)
-            )
-
-            sync_to_spotify(
-                tracks=tracks,
-                playlist_to_create=playlist_to_create,
-                public_playlist=public_playlist
-            )
+        sync_to_spotify(
+            playlist_ids=playlist_ids,
+            public_playlist=public_playlist
+        )
 
     return redirect(url_for('user.synchronization'))
 
