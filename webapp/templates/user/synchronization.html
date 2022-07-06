@@ -3,7 +3,6 @@
 {% block content %}
 <h3 class="text-center mt-3 mb-3">AnySync</h3>
 <h4 class="text-center">Для синхронизации выберите плейлисты и музыкальный сервис.</h4>
-<a href="{{ url_for('user.spotifyoauth') }}" class="btn btn-primary btn-md active" role="button" aria-pressed="true"><i class="fa-brands fa-spotify mr-2"></i>Подключить Spotify</a>
 <form action="/users/sync-playlist">
 	<table class="table table-striped mt-5">
 	<thead class="thead-dark">
@@ -35,28 +34,24 @@
 	<div class="row">
 		<div class="col mb-3">
 			<p>
-				Теперь выберите музыкальный сервис, в который хотите перенести плейлисты:
-			</p>
-			<div class="custom-control custom-radio mb-3">
-				<input type="radio" id="customRadio1" name="music_service" class="custom-control-input mr-3" value="Spotify">
-				<label class="custom-control-label" for="customRadio1"><i class="fa-brands fa-spotify mr-2"></i>Spotify</label>
-			</div>
-			<div class="custom-control custom-radio">
-				<input type="radio" id="customRadio2" name="music_service" class="custom-control-input mr-3" value="Yandex Music">
-				<label class="custom-control-label" for="customRadio2"><i class="fa-brands fa-yandex pr-2 mr-2"></i>Yandex Music</label>
-			</div>
-		</div>
-		<div class="col mb-3">
-			<p>
 				Сделать плейлист публичным?
 			</p>
 			<div class="custom-control custom-radio mb-3">
-				<input type="radio" id="customRadio3" name="public_playlist" class="custom-control-input mr-3" value="True">
-				<label class="custom-control-label" for="customRadio3">Да</label>
+				<input type="radio" id="customRadio1" name="public_playlist" class="custom-control-input mr-3" value="True" required>
+				<label class="custom-control-label" for="customRadio1">Да</label>
 			</div>
 			<div class="custom-control custom-radio">
-				<input type="radio" id="customRadio4" name="public_playlist" class="custom-control-input mr-3" value="False">
-				<label class="custom-control-label" for="customRadio4">Нет</label>
+				<input type="radio" id="customRadio2" name="public_playlist" class="custom-control-input mr-3" value="False" required>
+				<label class="custom-control-label" for="customRadio2">Нет</label>
+				<div class="invalid-feedback">Выберите Да или Нет.</div>
+			</div>
+		</div>
+		<div class="col mb-3">
+			<p  value={{ music_service }}>
+				Выбранные плейлисты будут перенесены в {{ music_service }}
+			</p>
+			<div class="custom-control custom-radio mb-3">
+				<input type="radio" checked="checked" id="customRadio3" name="music_service" class="custom-control-input mr-3" value="{{ music_service }}" required>
 			</div>
 		</div>
 	</div>
