@@ -101,6 +101,9 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+# Spotify caches
+webapp/spotify/spotify_caches/
+
 # Temp images folder
 webapp/images/
 

@@ -1,12 +1,11 @@
 from datetime import datetime
-import os
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 
 from webapp.db import db
 
-from webapp.spotify.spotify import sync_to_spotify
+from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
@@ -31,10 +30,10 @@ def profile():
 @blueprint.route("/spotifyoauth")
 @login_required
 def spotifyoauth():
+    auth_manager = spotify_auth()
+    auth_manager.get_access_token(request.args.get('code'))
     token = request.args.get('code')
     print(token)
-    os.environ["token"] = token
-    print(os.getenv("token"))
 
     return redirect(url_for('user.synchronization'))
 
@@ -47,9 +46,11 @@ def sync_playlist():
     public_playlist = request.values.get('public_playlist') == 'True'
 
     if music_service == 'Spotify':
+        auth_manager = spotify_auth()
         sync_to_spotify(
             playlist_ids=playlist_ids,
-            public_playlist=public_playlist
+            public_playlist=public_playlist,
+            auth_manager=auth_manager
         )
 
     return redirect(url_for('user.synchronization'))

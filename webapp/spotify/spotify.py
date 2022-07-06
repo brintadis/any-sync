@@ -68,16 +68,7 @@ def session_cache_path():
     return CACHES_FOLDER + str(current_user.id)
 
 
-def sync_to_spotify(playlist_ids, public_playlist):
-    """Creating a playlist and adding tracks into the playlist.
-
-    Args:
-        tracks (`SQLQeury`): list of tracks from DB.
-        playlist_to_create (`SQLQeury`): Playlist from DB,
-        that you want to create.
-        public_playlist (`bool`): Will be the playlist private or not.
-    """
-
+def spotify_auth():
     cache_handler = spotipy.cache_handler.CacheFileHandler(
         cache_path=session_cache_path()
     )
@@ -92,8 +83,18 @@ def sync_to_spotify(playlist_ids, public_playlist):
             # cache_path=f"webapp/spotify/cache/{current_user.id}/token.txt",
         )
 
-    auth_manager.get_access_token(os.getenv("token"))
-    print(auth_manager.validate_token(cache_handler.get_cached_token()))
+    return auth_manager
+
+
+def sync_to_spotify(playlist_ids, public_playlist, auth_manager):
+    """Creating a playlist and adding tracks into the playlist.
+
+    Args:
+        tracks (`SQLQeury`): list of tracks from DB.
+        playlist_to_create (`SQLQeury`): Playlist from DB,
+        that you want to create.
+        public_playlist (`bool`): Will be the playlist private or not.
+    """
 
     sp = spotipy.Spotify(auth_manager=auth_manager)
 
