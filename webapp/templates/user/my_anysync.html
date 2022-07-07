@@ -21,7 +21,7 @@
 <hr>
 <div class="row mt-3">
     {% for playlist in playlists %}
-        <div class="col mb-3" style="align-items: center;">
+        <div class="col-4 mb-3">
             <div class="card text-center" style="width: 18rem;">
                 <img class="card-img-top" src="{{ playlist.img_cover }}" alt="Card image cap">
                 <div class="card-body">
@@ -41,7 +41,7 @@
                                 <div class="dropdown-menu">
                                     <!-- Dropdown menu links -->
                                     <a class="dropdown-item" href="#">Редактировать</a>
-                                    <a class="dropdown-item" href="#">Удалить</a>
+                                    <a class="dropdown-item" href="{{ url_for('playlist.delete_playlist', playlist_id=playlist.id) }}">Удалить</a>
                                 </div>
                             </div>
                         </div>
