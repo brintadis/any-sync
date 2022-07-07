@@ -2,7 +2,7 @@
 
 {% block content %}
 <h3 class="text-center mt-3 mb-3">AnySync</h3>
-<h4 class="text-center">Для синхронизации выберите плейлисты и музыкальный сервис.</h4>
+<h4 class="text-center">Для синхронизации выберите плейлисты.</h4>
 <form action="/users/sync-playlist">
 	<table class="table table-striped mt-5">
 	<thead class="thead-dark">
@@ -48,14 +48,15 @@
 		</div>
 		<div class="col mb-3">
 			<p>
-				Выбранные плейлисты будут перенесены в
+				Выбранные плейлисты будут перенесены в 
 				{% if music_service == 'Spotify' %}
-					<i class="fa-brands fa-spotify mr-2">{{ music_service }}
+				<i class="fa-brands fa-spotify"></i>
 				{% elif music_service == 'Yandex Music' %}
-					<i class="fa-brands fa-yandex pr-2 mr-2">{{ music_service }}
+				<i class="fa-brands fa-yandex"></i>
 				{% endif %}
-				<input type="radio" checked="checked" id="customRadio3" name="music_service" class="custom-control-input" value="{{ music_service }}" required>
+				{{ music_service }}.
 			</p>
+			<input type="radio" checked="checked" id="customRadio3" name="music_service" class="custom-control-input" value="{{ music_service }}" required>
 		</div>
 	</div>
 	<div class="col mb-5">
