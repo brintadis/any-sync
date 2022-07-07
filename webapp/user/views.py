@@ -5,6 +5,8 @@ from flask_login import login_required, login_user, logout_user, current_user
 
 from webapp.db import db
 
+from webapp.spotify.spotify import spotify_auth, sync_to_spotify
+
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
 from webapp.playlist.models import Playlist
@@ -25,24 +27,47 @@ def profile():
     )
 
 
+@blueprint.route("/spotifyoauth")
+@login_required
+def spotifyoauth():
+    auth_manager = spotify_auth()
+    auth_manager.get_access_token(request.args.get('code'))
+    token = request.args.get('code')
+    print(token)
+
+    return redirect(url_for('user.synchronization', music_service='Spotify'))
+
+
 @blueprint.route("/sync-playlist")
 @login_required
 def sync_playlist():
-    print(request.values.getlist('playlist'))
-    print(request.values.get('music_service'))
-    return redirect(url_for('user.synchronization'))
+    playlist_ids = request.values.getlist('playlist')
+    music_service = request.values.get('music_service')
+    public_playlist = request.values.get('public_playlist') == 'True'
+    print(music_service)
+
+    if music_service == 'Spotify':
+        auth_manager = spotify_auth()
+        sync_to_spotify(
+            playlist_ids=playlist_ids,
+            public_playlist=public_playlist,
+            auth_manager=auth_manager
+        )
+
+    return redirect(url_for('user.profile'))
 
 
-@blueprint.route("/synchronization")
+@blueprint.route("/synchronization/<music_service>")
 @login_required
-def synchronization():
+def synchronization(music_service):
     title = "Синхронизация плейлистов"
     playlists = Playlist.query.filter(Playlist.user == current_user.id)
 
     return render_template(
         'user/synchronization.html',
         title=title,
-        playlists=playlists
+        playlists=playlists,
+        music_service=music_service
     )
 
 

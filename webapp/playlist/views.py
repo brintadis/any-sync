@@ -1,6 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, url_for
 from flask import render_template, redirect
 from flask_login import login_required
+
+from webapp.db import db
 
 from webapp.playlist.models import Playlist, Track
 from webapp.playlist.forms import PlaylistLinkForm
@@ -71,3 +73,12 @@ def playlist_user(user_id):
         playlists=playlists,
         user_id=user_id
     )
+
+
+@blueprint.route("/delete_playlist/<playlist_id>")
+def delete_playlist(playlist_id):
+    playlist_to_delete = Playlist.query.get(int(playlist_id))
+    db.session.delete(playlist_to_delete)
+    db.session.commit()
+
+    return redirect(url_for('user.profile'))
