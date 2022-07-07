@@ -47,12 +47,15 @@
 			</div>
 		</div>
 		<div class="col mb-3">
-			<p  value={{ music_service }}>
-				Выбранные плейлисты будут перенесены в {{ music_service }}
+			<p>
+				Выбранные плейлисты будут перенесены в
+				{% if music_service == 'Spotify' %}
+					<i class="fa-brands fa-spotify mr-2">{{ music_service }}
+				{% elif music_service == 'Yandex Music' %}
+					<i class="fa-brands fa-yandex pr-2 mr-2">{{ music_service }}
+				{% endif %}
+				<input type="radio" checked="checked" id="customRadio3" name="music_service" class="custom-control-input" value="{{ music_service }}" required>
 			</p>
-			<div class="custom-control custom-radio mb-3">
-				<input type="radio" checked="checked" id="customRadio3" name="music_service" class="custom-control-input mr-3" value="{{ music_service }}" required>
-			</div>
 		</div>
 	</div>
 	<div class="col mb-5">
