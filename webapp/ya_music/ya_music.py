@@ -150,3 +150,25 @@ def save_playlist(playlist_name, owner_name, tracks, kind_playlist, img_cover_ur
     db.session.commit()
 
     return new_playlist
+
+
+def create_new_playlist(playlist_ids, client):
+    for id in playlist_ids:
+        playlist_name = Playlist.query.filter(Playlist.id == int(id)).first()
+        new_playlist = client.users_playlists_create(f'{playlist_name.playlist_name}')
+        tracks = Track.query.filter(Track.playlist == int(id))
+        track_list = []
+        for track in tracks:
+            track_list.append(f'{track.track_name} {track.artist}')
+        revision = 1
+        for track_name in track_list:
+            resalt_search = client.search(f'{track_name}', type_='all')
+            if resalt_search.type == 'track':
+                resalt_best_track_id = resalt_search.best.result.id
+                resalt_best_album_id = resalt_search.best.result.albums[0].id
+                client.users_playlists_insert_track(new_playlist.kind, resalt_best_track_id,
+                                                    resalt_best_album_id, revision=revision)
+                revision += 1
+            else:
+                print(f'Трек {track_name} отсутствует')
+        revision = 0
