@@ -7,7 +7,11 @@ from webapp.db import db
 
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-from webapp.playlist.models import Playlist
+from webapp.playlist.models import Playlist, Track
+from yandex_music import Client
+from webapp.ya_music.token_ya import get_token
+
+client = Client(get_token()).init()
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
 
@@ -28,8 +32,26 @@ def profile():
 @blueprint.route("/sync-playlist")
 @login_required
 def sync_playlist():
-    print(request.values.getlist('playlist'))
-    print(request.values.get('music_service'))
+    playlist_name2 = Playlist.query.filter(Playlist.id == request.values.get('playlist')[0])
+    for name in playlist_name2:
+        playlist_name1 = name.playlist_name
+    new_playlist = client.users_playlists_create(f'{playlist_name1}')
+    tracks = Track.query.filter(Track.playlist == request.values.get('playlist')[0])
+    track_list = []
+    for track in tracks:
+        track_list.append(f'{track.track_name} {track.artist}')
+    print(track_list)
+    revision = 1
+    for track_name in track_list:
+        resalt_search = client.search(f'{track_name}', type_='all')
+        if resalt_search.type == 'track':
+            resalt_best_track_id = resalt_search.best.result.id
+            resalt_best_album_id = resalt_search.best.result.albums[0].id
+        else:
+            print(f'Трек {track_name} отсутствует')
+        client.users_playlists_insert_track(new_playlist.kind, resalt_best_track_id,
+                                            resalt_best_album_id, revision=revision)
+        revision += 1
     return redirect(url_for('user.synchronization'))
 
 
