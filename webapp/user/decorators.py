@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import current_app, flash, request, redirect, url_for
+from flask import current_app, flash, redirect, request, url_for
 from flask_login import config, current_user
 
 

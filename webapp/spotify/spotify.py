@@ -1,13 +1,12 @@
-import spotipy
 import os
+from datetime import datetime, timedelta
 
+import spotipy
 from flask_login import current_user
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 
 from webapp.db import db
 from webapp.playlist.models import Playlist, Track
-
-from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
-from datetime import timedelta, datetime
 
 # Client Credentials Flow and Scope settings
 CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")

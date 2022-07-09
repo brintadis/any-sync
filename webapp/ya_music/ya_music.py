@@ -1,19 +1,17 @@
-import requests
 import os
 import shutil
+from datetime import datetime, timedelta
+from random import shuffle
 
+import requests
 from flask import url_for
 from flask_login import current_user
-
-from random import shuffle
-from datetime import timedelta, datetime
-
 from PIL import Image
 from yandex_music import Client
 
-from webapp.ya_music.collage_maker import make_collage
 from webapp.db import db
 from webapp.playlist.models import Playlist, Track
+from webapp.ya_music.collage_maker import make_collage
 
 
 def get_collage_items(list_image_urls):

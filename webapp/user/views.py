@@ -1,17 +1,16 @@
-from datetime import datetime
 import os
+from datetime import datetime
+
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import login_required, login_user, logout_user, current_user
+from flask_login import current_user, login_required, login_user, logout_user
+from yandex_music import Client
 
 from webapp.db import db
-
+from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
-from yandex_music import Client
-from webapp.ya_music.token_ya import get_token, get_cach_token
-
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-from webapp.playlist.models import Playlist
+from webapp.ya_music.token_ya import get_cach_token, get_token
 from webapp.ya_music.ya_music import create_new_playlist
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
@@ -22,7 +21,6 @@ blueprint = Blueprint('user', __name__, url_prefix='/users')
 def profile():
     title = 'Мой AnySync'
     playlists = Playlist.query.filter(Playlist.user == current_user.id)
-
     return render_template(
         'user/my_anysync.html',
         title=title,
@@ -44,7 +42,7 @@ def spotifyoauth():
 @blueprint.route('/yandexoauth')
 @login_required
 def yandexoauth():
-    CACHES_FOLDER = f'webapp/ya_music/yandex_caches/{current_user.id}.txt'
+    CACHES_FOLDER = current_user.yandex_token
     if not os.path.exists(CACHES_FOLDER):
         get_token()
     return redirect(url_for('user.synchronization', music_service='Yandex Music'))

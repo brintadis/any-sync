@@ -1,8 +1,8 @@
 import json
-from time import sleep
 import os
-from flask_login import current_user
+from time import sleep
 
+from flask_login import current_user
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.command import Command

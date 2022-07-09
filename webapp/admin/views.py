@@ -1,9 +1,8 @@
 from flask import Blueprint, render_template
 
-from webapp.user.models import User
-from webapp.user.decorators import admin_required
-
 from webapp.playlist.models import Playlist
+from webapp.user.decorators import admin_required
+from webapp.user.models import User
 
 blueprint = Blueprint('admin', __name__, url_prefix='/admin')
 
