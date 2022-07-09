@@ -9,6 +9,9 @@
             <th scope="col">Название трека</th>
             <th scope="col">Исполнитель</th>
             <th scope="col">Длительность</th>
+            {% if current_playlist.user == current_user.id %}
+            <th scope="col"><i class="fa-solid fa-trash"></i></th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -21,6 +24,9 @@
             </td>
             <td>{{ track.artist }}</td>
             <td>{{ track.duration }}</td>
+            {% if current_playlist.user == current_user.id %}
+            <th scope="col"><a href="{{ url_for('playlist.delete_track', track_id=track.id) }}" style="text-decoration: none; color: #000;"><i class="fa-solid fa-trash"></i></a></th>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

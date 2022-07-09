@@ -48,7 +48,7 @@ def all_playlists():
 
 @blueprint.route("/playlist/<playlist_id>", methods=['GET', 'POST'])
 def playlist(playlist_id):
-    title = 'Треклист плейлиста'
+    title = 'Треклист'
     current_playlist = Playlist.query.filter(
         Playlist.id == playlist_id
         ).first()
@@ -58,7 +58,7 @@ def playlist(playlist_id):
         'playlist/playlist.html',
         page_title=title,
         track_list=track_list,
-        current_playlist=current_playlist
+        current_playlist=current_playlist,
     )
 
 
@@ -82,3 +82,13 @@ def delete_playlist(playlist_id):
     db.session.commit()
 
     return redirect(url_for('user.profile'))
+
+
+@blueprint.route("/delete_track_from_playlist/<track_id>")
+def delete_track(track_id):
+    track_to_delete = Track.query.get(int(track_id))
+    playlist_id = track_to_delete.playlist
+    db.session.delete(track_to_delete)
+    db.session.commit()
+
+    return redirect(url_for('playlist.playlist', playlist_id=playlist_id))
