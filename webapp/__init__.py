@@ -2,8 +2,8 @@ from flask import Flask, render_template, send_from_directory
 from flask_login import LoginManager
 from flask_migrate import Migrate
 
-from webapp.db import db
 from webapp.admin.views import blueprint as admin_blueprint
+from webapp.db import db
 from webapp.playlist.views import blueprint as playlist_blueprint
 from webapp.user.models import User
 from webapp.user.views import blueprint as user_blueprint

@@ -1,6 +1,5 @@
 from flask_login import UserMixin
-
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from webapp.db import db
 from webapp.playlist.models import Playlist

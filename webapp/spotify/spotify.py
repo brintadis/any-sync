@@ -1,13 +1,12 @@
-import spotipy
 import os
+from datetime import datetime, timedelta
 
+import spotipy
 from flask_login import current_user
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 
 from webapp.db import db
 from webapp.playlist.models import Playlist, Track
-
-from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
-from datetime import timedelta, datetime
 
 # Client Credentials Flow and Scope settings
 CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
@@ -27,6 +26,15 @@ SCOPE = (
 CACHES_FOLDER = 'webapp/spotify/spotify_caches/'
 if not os.path.exists(CACHES_FOLDER):
     os.makedirs(CACHES_FOLDER)
+
+
+def get_playlist_tracks(sp, playlist_id):
+    results = sp.playlist_tracks(playlist_id)
+    tracks = results['items']
+    while results['next']:
+        results = sp.next(results)
+        tracks.extend(results['items'])
+    return tracks
 
 
 def get_playlist_by_id(playlist_url):
@@ -54,12 +62,13 @@ def get_playlist_by_id(playlist_url):
     playlist_name = playlist['name']
     owner_name = playlist['owner']['display_name']
     img_cover = playlist['images'][0]['url']
+    tracks = get_playlist_tracks(sp=sp, playlist_id=playlist_id)
 
     return save_playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
         img_cover=img_cover,
-        tracks=playlist['tracks']['items'],
+        tracks=tracks,
         id_playlist=playlist_id
     )
 
