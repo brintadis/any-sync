@@ -106,7 +106,6 @@ def get_playlist_ya(url):
             playlist.cover['uri']).replace('%%', '200x200')
         img_cover_url = f'https://{img_cover_url}'
 
-    print(type(save_playlist))
     return save_playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
