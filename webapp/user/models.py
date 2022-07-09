@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(10), index=True)
     email = db.Column(db.String(50), nullable=False)
     registration_date = db.Column(db.String(20), nullable=False)
+    yandex_token = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
         return '<User {} id {}>'.format(self.username, self.id)

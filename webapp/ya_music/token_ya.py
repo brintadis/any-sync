@@ -1,16 +1,18 @@
 import json
 from time import sleep
-import os
+# import os
 from flask_login import current_user
-
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.command import Command
 from webdriver_manager.chrome import ChromeDriverManager
+from webapp.user.models import User
 
-CACHES_FOLDER = 'webapp/ya_music/yandex_caches/'
-if not os.path.exists(CACHES_FOLDER):
-    os.makedirs(CACHES_FOLDER)
+from webapp import db
+
+# CACHES_FOLDER = 'webapp/ya_music/yandex_caches/'
+# if not os.path.exists(CACHES_FOLDER):
+#     os.makedirs(CACHES_FOLDER)
 
 
 def is_active(driver):
@@ -21,8 +23,8 @@ def is_active(driver):
         return False
 
 
-def token_cache_path():
-    return CACHES_FOLDER + str(current_user.id) + '.txt'
+# def token_cache_path():
+#     return CACHES_FOLDER + str(current_user.id) + '.txt'
 
 
 def get_token():
@@ -51,26 +53,34 @@ def get_token():
             if url_fragment:
                 token = url_fragment.split('&')[0].split('=')[1]
 
+    User.query.filter(User.id == current_user.id).update(dict(yandex_token=token))
+    db.session.commit()
+
     try:
         driver.close()
     except:
         pass
-    cache_path = token_cache_path()
-    try:
-        f = open(cache_path, "w")
-        f.write(token)
-        f.close()
-    except IOError:
-        print('Couldn\'t write token to cache at: %s', cache_path)
+
+    # try:
+    #     driver.close()
+    # except:
+    #     pass
+    # cache_path = token_cache_path()
+    # try:
+    #     f = open(cache_path, "w")
+    #     f.write(token)
+    #     f.close()
+    # except IOError:
+    #     print('Couldn\'t write token to cache at: %s', cache_path)
 
 
-def get_cach_token(token_path):
-    token_info = ''
-    try:
-        f = open(token_path)
-        token_info = f.read()
-        f.close()
+# def get_cach_token(token_path):
+#     token_info = ''
+#     try:
+#         f = open(token_path)
+#         token_info = f.read()
+#         f.close()
 
-    except IOError as error:
-        print("Couldn't read cache at: %s", {token_path})
-    return token_info
+#     except IOError as error:
+#         print("Couldn't read cache at: %s", {token_path})
+#     return token_info

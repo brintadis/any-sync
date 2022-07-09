@@ -1,5 +1,4 @@
 from datetime import datetime
-import os
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 
@@ -7,7 +6,7 @@ from webapp.db import db
 
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from yandex_music import Client
-from webapp.ya_music.token_ya import get_token, get_cach_token
+from webapp.ya_music.token_ya import get_token
 
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
@@ -36,7 +35,6 @@ def spotifyoauth():
     auth_manager = spotify_auth()
     auth_manager.get_access_token(request.args.get('code'))
     token = request.args.get('code')
-    print(token)
 
     return redirect(url_for('user.synchronization', music_service='Spotify'))
 
@@ -44,8 +42,7 @@ def spotifyoauth():
 @blueprint.route('/yandexoauth')
 @login_required
 def yandexoauth():
-    CACHES_FOLDER = f'webapp/ya_music/yandex_caches/{current_user.id}.txt'
-    if not os.path.exists(CACHES_FOLDER):
+    if current_user.yandex_token is None:
         get_token()
     return redirect(url_for('user.synchronization', music_service='Yandex Music'))
 
@@ -56,7 +53,6 @@ def sync_playlist():
     playlist_ids = request.values.getlist('playlist')
     music_service = request.values.get('music_service')
     public_playlist = request.values.get('public_playlist') == 'True'
-    print(music_service)
 
     if music_service == 'Spotify':
         auth_manager = spotify_auth()
@@ -66,7 +62,8 @@ def sync_playlist():
             auth_manager=auth_manager
         )
     elif music_service == 'Yandex Music':
-        client = Client(get_cach_token(f'webapp/ya_music/yandex_caches/{current_user.id}.txt')).init()
+        token = current_user.yandex_token
+        client = Client(token).init()
         create_new_playlist(playlist_ids=playlist_ids, client=client)
     return redirect(url_for('user.profile'))
 
