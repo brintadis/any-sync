@@ -31,7 +31,7 @@ SECRET_KEY = ""
 
 <img src= "https://imgur.com/hzTnqk6.png" width = "480" height = "360">
 
-На этой странице вам необходимо указать Redirect URIs и точно такой же redirect указать в файле ```webapp/spotify/spotify.py``` в переменной ```REDIRECT_URI```. На этой же странице, вы получаете ```Client ID``` и ```Client Secret``` своего Spotify приложения и устанавливаете зависимости ниже.
+На этой странице вам необходимо указать Redirect URIs и точно такой же redirect указать в файле ```webapp/spotify/spotify.py``` в переменной ```REDIRECT_URI```. На этой же странице вы получаете ```Client ID``` и ```Client Secret``` своего Spotify приложения и устанавливаете зависимости ниже.
 
 Linux и Mac:
 ```
