@@ -11,13 +11,13 @@ from webapp.user.views import blueprint as user_blueprint
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_pyfile('config.py')
+    app.config.from_pyfile("config.py")
     db.init_app(app)
     migrate = Migrate(app, db)  # noqa: F841
 
     login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = 'user.login'
+    login_manager.login_view = "user.login"
 
     app.register_blueprint(admin_blueprint)
     app.register_blueprint(playlist_blueprint)
@@ -30,11 +30,11 @@ def create_app():
     @app.route("/")
     def index():
         title = "AnySync"
-        return render_template('index.html', page_title=title)
+        return render_template("index.html", page_title=title)
 
     @app.route("/media/<name>")
     def send_media(name):
-        print(app.config['UPLOAD_FOLDER'], name)
-        return send_from_directory(app.config['UPLOAD_FOLDER'], name)
+        print(app.config["UPLOAD_FOLDER"], name)
+        return send_from_directory(app.config["UPLOAD_FOLDER"], name)
 
     return app

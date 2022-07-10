@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     spotify_token = db.Column(db.String(500), nullable=True)
 
     def __repr__(self):
-        return '<User {} id {}>'.format(self.username, self.id)
+        return "<User {} id {}>".format(self.username, self.id)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
 
     @property
     def is_admin(self):
-        return self.role == 'admin'
+        return self.role == "admin"
 
     def count_playlist(self):
         return Playlist.query.filter(Playlist.user == self.id).count()

@@ -3,7 +3,7 @@ from webapp.db import db
 
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    playlist = db.Column(db.Integer, db.ForeignKey('playlist.id'))
+    playlist = db.Column(db.Integer, db.ForeignKey("playlist.id"))
     artist = db.Column(db.String, nullable=False)
     track_name = db.Column(db.String, nullable=False)
     duration = db.Column(db.String, nullable=False)
@@ -15,7 +15,7 @@ class Track(db.Model):
 
 class Playlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     playlist_name = db.Column(db.String, nullable=False)
     owner_name = db.Column(db.String, nullable=False)
     last_update = db.Column(db.DateTime, nullable=True)
