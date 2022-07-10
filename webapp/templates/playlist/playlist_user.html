@@ -18,7 +18,7 @@
             <th scope="row">{{ loop.index }}</th>
             <td>
                 <img src="{{ playlist.img_cover }}" alt="..." class="mr-3" width="40">
-                <a href="/playlist/playlist/{{ playlist.id }}">{{ playlist.playlist_name }}</a>
+                <a href="{{ url_for('playlist.playlist', playlist_id=playlist.id) }}">{{ playlist.playlist_name }}</a>
             </td>
             <td>{{ playlist.count_tracks() }}</td>
             <td>{{ playlist.owner_name }}</td>

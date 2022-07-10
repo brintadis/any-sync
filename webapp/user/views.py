@@ -1,5 +1,4 @@
 from datetime import datetime
-import os
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
@@ -8,7 +7,6 @@ from yandex_music import Client
 from webapp.db import db
 from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
-from yandex_music import Client
 from webapp.ya_music.token_ya import get_token
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
@@ -34,7 +32,6 @@ def profile():
 def spotifyoauth():
     auth_manager = spotify_auth()
     auth_manager.get_access_token(request.args.get('code'))
-    token = request.args.get('code')
 
     return redirect(url_for('user.synchronization', music_service='Spotify'))
 

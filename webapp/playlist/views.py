@@ -19,10 +19,10 @@ def test():
     if url_form.validate_on_submit():
         if 'spotify' in url_form.link.data:
             new_playlist = get_playlist_by_id(url_form.link.data)
-            return redirect(f'playlist/{new_playlist.id}')
+            return redirect(url_for('playlist.playlist', playlist_id=new_playlist.id))
         elif 'yandex' in url_form.link.data:
             new_playlist = get_playlist_ya(url_form.link.data)
-            return redirect(f'playlist/{new_playlist.id}')
+            return redirect(url_for('playlist.playlist', playlist_id=new_playlist.id))
 
     return render_template(
         'playlist/test.html',
