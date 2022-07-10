@@ -1,14 +1,15 @@
 import json
 from time import sleep
+
 # import os
 from flask_login import current_user
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.command import Command
 from webdriver_manager.chrome import ChromeDriverManager
-from webapp.user.models import User
 
 from webapp import db
+from webapp.user.models import User
 
 # CACHES_FOLDER = 'webapp/ya_music/yandex_caches/'
 # if not os.path.exists(CACHES_FOLDER):
