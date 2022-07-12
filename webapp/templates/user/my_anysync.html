@@ -31,7 +31,7 @@
                     <p class="card-text">Дата создания: 02-07-2022</p>
                     <div class="row">
                         <div class="col">
-                            <a href="/playlist/playlist/{{ playlist.id }}" class="btn btn-dark">Открыть</a>
+                            <a href="{{ url_for('playlist.playlist', playlist_id=playlist.id) }}" class="btn btn-dark">Открыть</a>
                         </div>
                         <div class="col">
                             <div class="btn-group dropup">

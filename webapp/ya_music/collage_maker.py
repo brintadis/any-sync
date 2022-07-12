@@ -7,7 +7,7 @@ def make_collage(images, filename, width=200, init_height=100):
     from `images` and save to `filename`.
     """
     if not images:
-        print('No images for collage found!')
+        print("No images for collage found!")
         return False
 
     margin_size = 2
@@ -49,10 +49,10 @@ def make_collage(images, filename, width=200, init_height=100):
         if imgs_line:
             out_height += int(init_height / coef) + margin_size
     if not out_height:
-        print('Height of collage could not be 0!')
+        print("Height of collage could not be 0!")
         return False
 
-    collage_image = Image.new('RGB', (width, int(out_height)), (35, 35, 35))
+    collage_image = Image.new("RGB", (width, int(out_height)), (35, 35, 35))
     # put images to the collage
     y = 0
     for coef, imgs_line in coefs_lines:
@@ -65,13 +65,11 @@ def make_collage(images, filename, width=200, init_height=100):
                 k = (init_height / coef) / img.size[1]
                 if k > 1:
                     img = img.resize(
-                        (int(img.size[0] * k), int(img.size[1] * k)),
-                        Image.ANTIALIAS
+                        (int(img.size[0] * k), int(img.size[1] * k)), Image.ANTIALIAS
                     )
                 else:
                     img.thumbnail(
-                        (int(width / coef), int(init_height / coef)),
-                        Image.ANTIALIAS
+                        (int(width / coef), int(init_height / coef)), Image.ANTIALIAS
                     )
                 if collage_image:
                     collage_image.paste(img, (int(x), int(y)))

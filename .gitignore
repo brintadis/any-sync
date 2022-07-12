@@ -101,8 +101,14 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+# Docker
+Dockerfile
+docker-compose.yml
+data/
+
 # Spotify caches
 webapp/spotify/spotify_caches/
+webapp/ya_music/yandex_caches
 
 # Temp images folder
 webapp/images/

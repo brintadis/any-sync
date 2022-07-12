@@ -1,8 +1,8 @@
 import os
 from datetime import timedelta
 
-UPLOAD_FOLDER = 'images/collage'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+UPLOAD_FOLDER = "images/collage"
+ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
 
 SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:password@db:5432/playlst'
 # basedir = os.path.abspath(os.path.dirname(__file__))

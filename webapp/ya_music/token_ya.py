@@ -1,14 +1,15 @@
 import json
 from time import sleep
+
 # import os
 from flask_login import current_user
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.command import Command
 from webdriver_manager.chrome import ChromeDriverManager
-from webapp.user.models import User
 
 from webapp import db
+from webapp.user.models import User
 
 # CACHES_FOLDER = 'webapp/ya_music/yandex_caches/'
 # if not os.path.exists(CACHES_FOLDER):
@@ -35,7 +36,8 @@ def get_token():
     driver = webdriver.Remote(desired_capabilities=capabilities,
                               command_executor="http://selenium:4444/wd/hub")
     driver.get(
-        "https://oauth.yandex.ru/authorize?response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d")
+        "https://oauth.yandex.ru/authorize?response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d"
+    )
 
     token = None
 
@@ -43,22 +45,22 @@ def get_token():
         sleep(1)
         try:
             logs_raw = driver.get_log("performance")
-        except:
+        except Exception:
             pass
 
         for lr in logs_raw:
             log = json.loads(lr["message"])["message"]
-            url_fragment = log.get('params', {}).get('frame', {}).get('urlFragment')
+            url_fragment = log.get("params", {}).get("frame", {}).get("urlFragment")
 
             if url_fragment:
-                token = url_fragment.split('&')[0].split('=')[1]
+                token = url_fragment.split("&")[0].split("=")[1]
 
     User.query.filter(User.id == current_user.id).update(dict(yandex_token=token))
     db.session.commit()
 
     try:
         driver.close()
-    except:
+    except Exception:
         pass
 
     # try:
