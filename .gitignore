@@ -104,6 +104,7 @@ celerybeat.pid
 # Docker
 Dockerfile
 docker-compose.yml
+data/
 
 # Spotify caches
 webapp/spotify/spotify_caches/
