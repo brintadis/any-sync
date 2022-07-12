@@ -1,0 +1,33 @@
+version: '3'
+services:
+  webapp:
+    build: .
+    restart: always
+    environment:
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=True  
+      - FLASK_APP=webapp
+      - FLASK_DEBUG=1
+    volumes:
+      - .:/backend
+    ports:
+      - 5000:5000
+    command: flask run -h 0.0.0.0 --port 5000
+  redis:
+    image: redis:alpine
+  db:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=playlst
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  selenium:
+    image: selenium/standalone-chrome:latest
+    platform: linux/amd64
+    ports:
+      - 4444:4444

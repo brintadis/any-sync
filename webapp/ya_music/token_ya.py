@@ -32,11 +32,9 @@ def get_token():
     # make chrome log requests
     capabilities = DesiredCapabilities.CHROME
     capabilities["loggingPrefs"] = {"performance": "ALL"}
-    capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
-    driver = webdriver.Chrome(
-        desired_capabilities=capabilities,
-        executable_path=ChromeDriverManager().install(),
-    )
+    capabilities['goog:loggingPrefs'] = {'performance': 'ALL'}
+    driver = webdriver.Remote(desired_capabilities=capabilities,
+                              command_executor="http://selenium:4444/wd/hub")
     driver.get(
         "https://oauth.yandex.ru/authorize?response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d"
     )

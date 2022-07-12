@@ -141,3 +141,4 @@ dmypy.json
 .pyre/
 settings.py
 *.db
+data/db
