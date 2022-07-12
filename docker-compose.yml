@@ -26,3 +26,8 @@ services:
       - ./data/db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+  selenium:
+    image: selenium/standalone-chrome:latest
+    platform: linux/amd64
+    ports:
+      - 4444:4444

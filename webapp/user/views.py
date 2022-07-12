@@ -11,7 +11,7 @@ from webapp.ya_music.token_ya import get_token
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
 from webapp.playlist.models import Playlist
-from webapp.ya_music.ya_music import create_new_playlist
+from tasks import new_playlist
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
 
@@ -64,7 +64,7 @@ def sync_playlist():
     elif music_service == 'Yandex Music':
         token = current_user.yandex_token
         client = Client(token).init()
-        create_new_playlist(playlist_ids=playlist_ids, client=client)
+        new_playlist.delay(playlist_ids=playlist_ids, client=client)
     return redirect(url_for('user.profile'))
 
 
