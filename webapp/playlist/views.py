@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, jsonify
 from flask_login import login_required
 
 from webapp.db import db
@@ -29,6 +29,7 @@ def test():
 
 
 @blueprint.route("/playlists")
+@login_required
 def all_playlists():
     title = "Список плейлистов"
     playlists = Playlist.query.all()
@@ -39,6 +40,7 @@ def all_playlists():
 
 
 @blueprint.route("/playlist/<playlist_id>", methods=["GET", "POST"])
+@login_required
 def playlist(playlist_id):
     title = "Треклист"
     current_playlist = Playlist.query.filter(Playlist.id == playlist_id).first()
@@ -66,6 +68,7 @@ def playlist_user(user_id):
 
 
 @blueprint.route("/delete_playlist/<playlist_id>")
+@login_required
 def delete_playlist(playlist_id):
     playlist_to_delete = Playlist.query.get(int(playlist_id))
     Track.query.filter(Track.playlist == int(playlist_id)).delete()
@@ -76,6 +79,7 @@ def delete_playlist(playlist_id):
 
 
 @blueprint.route("/delete_track_from_playlist/<track_id>")
+@login_required
 def delete_track(track_id):
     track_to_delete = Track.query.get(int(track_id))
     playlist_id = track_to_delete.playlist
@@ -86,3 +90,13 @@ def delete_track(track_id):
     db.session.commit()
 
     return redirect(url_for("playlist.playlist", playlist_id=playlist_id))
+
+
+@blueprint.route("/rename_playlist/<playlist_id>")
+@login_required
+def rename_playlist(playlist_id):
+    playlist_to_change = Playlist.query.filter(Playlist.id == playlist_id).first()
+    playlist_to_change.playlist_name = request.args.get("playlist_name")
+    db.session.commit()
+
+    return jsonify({"status": "ok"})

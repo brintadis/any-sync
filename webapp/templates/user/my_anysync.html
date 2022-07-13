@@ -25,7 +25,7 @@
             <div class="card text-center" style="width: 18rem;">
                 <img class="card-img-top" src="{{ playlist.img_cover }}" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">{{ playlist.playlist_name }}</h5>
+                    <h5 class="card-title" id="{{ playlist.id }}">{{ playlist.playlist_name }}</h5>
                     <p class="card-text">Количество треков: {{ playlist.count_tracks() }}</p>
                     <p class="card-text">Создатель плейлиста: <br>{{ playlist.owner_name }}</p>
                     <p class="card-text">Последнее обновление: <br>{{ playlist.last_update }}</p>
@@ -49,6 +49,25 @@
                 </div>
             </div>
         </div>
+        <script>
+            var playlist_name=document.querySelectorAll(".card-title");
+            console.log(playlist_name);
+            for (let index = 0; index < playlist_name.length; index++) {
+                const element = playlist_name[index];
+                element.addEventListener("click", function () {
+                    element.innerHTML = "<input></input>";
+                    // element.innerHTML = element.innerHTML + "1";
+                    // 1. Создаём новый XMLHttpRequest-объект
+                    let xhr = new XMLHttpRequest();
+
+                    // 2. Настраиваем его: GET-запрос по URL /article/.../load
+                    xhr.open('GET', '/playlist/rename_playlist/' + element.id + "?playlist_name=" + element.innerHTML);
+
+                    // 3. Отсылаем запрос
+                    xhr.send();
+                })
+            }
+        </script>
     {% endfor %}
 </div>
 {% endblock %}
