@@ -9,8 +9,8 @@ from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-from webapp.playlist.models import Playlist
 from tasks import new_playlist
+from webapp.ya_music.token_ya import get_token
 
 
 blueprint = Blueprint("user", __name__, url_prefix="/users")

@@ -6,7 +6,6 @@ from flask_login import current_user
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.command import Command
-from webdriver_manager.chrome import ChromeDriverManager
 
 from webapp import db
 from webapp.user.models import User
