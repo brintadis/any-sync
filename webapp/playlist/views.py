@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, redirect, render_template, url_for
 from flask_login import login_required
 
@@ -78,6 +79,9 @@ def delete_playlist(playlist_id):
 def delete_track(track_id):
     track_to_delete = Track.query.get(int(track_id))
     playlist_id = track_to_delete.playlist
+    playlist_to_update = Playlist.query.get(track_to_delete.playlist)
+    playlist_to_update.last_update = datetime.today()
+
     db.session.delete(track_to_delete)
     db.session.commit()
 

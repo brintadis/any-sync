@@ -120,6 +120,7 @@ def save_playlist(
         kind=kind_playlist,
         img_cover=img_cover_url,
         user=current_user.id,
+        last_update=datetime.today().date()
     )
     db.session.add(new_playlist)
     db.session.commit()

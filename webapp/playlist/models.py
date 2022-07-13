@@ -18,7 +18,7 @@ class Playlist(db.Model):
     user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     playlist_name = db.Column(db.String, nullable=False)
     owner_name = db.Column(db.String, nullable=False)
-    last_update = db.Column(db.DateTime, nullable=True)
+    last_update = db.Column(db.Date, nullable=True)
     description = db.Column(db.Text, nullable=True)
     img_cover = db.Column(db.String, nullable=True)
     kind = db.Column(db.String, nullable=True)

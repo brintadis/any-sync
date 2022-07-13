@@ -149,6 +149,7 @@ def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
         owner_name=owner_name,
         img_cover=img_cover,
         user=current_user.id,
+        last_update=datetime.today()
     )
 
     db.session.add(new_playlist)

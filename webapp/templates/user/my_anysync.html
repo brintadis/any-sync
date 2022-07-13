@@ -28,7 +28,7 @@
                     <h5 class="card-title">{{ playlist.playlist_name }}</h5>
                     <p class="card-text">Количество треков: {{ playlist.count_tracks() }}</p>
                     <p class="card-text">Создатель плейлиста: <br>{{ playlist.owner_name }}</p>
-                    <p class="card-text">Дата создания: 02-07-2022</p>
+                    <p class="card-text">Последнее обновление: <br>{{ playlist.last_update }}</p>
                     <div class="row">
                         <div class="col">
                             <a href="{{ url_for('playlist.playlist', playlist_id=playlist.id) }}" class="btn btn-dark">Открыть</a>
