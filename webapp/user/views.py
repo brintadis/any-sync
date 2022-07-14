@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from yandex_music import Client
+# from yandex_music import Client
 
 from webapp.db import db
 from webapp.playlist.models import Playlist
@@ -56,9 +56,9 @@ def sync_playlist():
             auth_manager=auth_manager,
         )
     elif music_service == "Yandex Music":
-        token = current_user.yandex_token
-        client = Client(token).init()
-        new_playlist.delay(playlist_ids=playlist_ids, client=client)
+        # token = current_user.yandex_token
+        # client = Client(token).init()
+        new_playlist.delay(playlist_ids=playlist_ids)
     return redirect(url_for('user.profile'))
 
 
