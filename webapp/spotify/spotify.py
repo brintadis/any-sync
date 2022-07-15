@@ -85,7 +85,8 @@ def spotify_auth():
         client_secret=CLIENT_SECRET,
         redirect_uri=REDIRECT_URI,
         show_dialog=True,
-        cache_handler=cache_handler
+        cache_handler=cache_handler,
+        open_browser=False
         # cache_path=f"webapp/spotify/cache/{current_user.id}/token.txt",
     )
 

@@ -24,10 +24,21 @@ def profile():
     return render_template("user/my_anysync.html", title=title, playlists=playlists)
 
 
+@blueprint.route("/startspotoauth")
+@login_required
+def start_spot_oauth():
+    auth_manager = spotify_auth()
+    auth_url = auth_manager.get_authorize_url()
+    print(auth_url)
+    
+    return redirect(auth_url)
+
+
 @blueprint.route("/spotifyoauth")
 @login_required
 def spotifyoauth():
     auth_manager = spotify_auth()
+    print(request.args)
     auth_manager.get_access_token(request.args.get("code"))
 
     return redirect(url_for("user.synchronization", music_service="Spotify"))
