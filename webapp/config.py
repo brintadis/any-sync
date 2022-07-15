@@ -14,4 +14,4 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 REMEMBER_COOKIE_DURATION = timedelta(days=30)
 
-SECRET_KEY = os.urandom(32)
+SECRET_KEY = os.environ.get("FLASK_SECRET")
