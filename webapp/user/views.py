@@ -9,7 +9,7 @@ from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-from tasks import new_playlist
+from webapp.tasks import new_playlist
 from webapp.ya_music.token_ya import get_token
 
 
@@ -67,9 +67,9 @@ def sync_playlist():
             auth_manager=auth_manager,
         )
     elif music_service == "Yandex Music":
-        # token = current_user.yandex_token
+        token = current_user.yandex_token
         # client = Client(token).init()
-        new_playlist.delay(playlist_ids=playlist_ids)
+        new_playlist.delay(playlist_ids=playlist_ids, token=token)
     return redirect(url_for('user.profile'))
 
 
