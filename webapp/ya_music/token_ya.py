@@ -6,6 +6,7 @@ from flask_login import current_user
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.command import Command
+from selenium.webdriver.common.by import By
 
 from webapp import db
 from webapp.user.models import User
@@ -26,8 +27,7 @@ def is_active(driver):
 # def token_cache_path():
 #     return CACHES_FOLDER + str(current_user.id) + '.txt'
 
-
-def get_token():
+def sel_driver():
     # make chrome log requests
     capabilities = DesiredCapabilities.CHROME
     capabilities["loggingPrefs"] = {"performance": "ALL"}
@@ -37,6 +37,23 @@ def get_token():
     driver.get(
         "https://oauth.yandex.ru/authorize?response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d"
     )
+
+    driver.find_element(By.XPATH, "//span[text()='QR-код']").click()
+    qr_code = driver.find_element(By.CLASS_NAME, "MagicField-qr")
+    print(qr_code)
+    qr_url = qr_code.value_of_css_property('background-image')
+    print(qr_url)
+    # qr_url = "https://passport.yandex.ru" + qr_url.split('"')[1]
+    # driver.get(qr_url)
+
+    return qr_url, driver
+
+
+def get_token(driver):
+    # user_login = "makar.tim@example.com"
+
+    # driver.find_element(By.ID, "passp-field-login").send_keys(user_login)
+    # driver.find_element(By.ID, "passp-field-login").send_keys(user_login)
 
     token = None
 

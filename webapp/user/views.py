@@ -10,7 +10,7 @@ from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
 from tasks import new_playlist
-from webapp.ya_music.token_ya import get_token
+from webapp.ya_music.token_ya import get_token, sel_driver
 
 
 blueprint = Blueprint("user", __name__, url_prefix="/users")
@@ -30,7 +30,7 @@ def start_spot_oauth():
     auth_manager = spotify_auth()
     auth_url = auth_manager.get_authorize_url()
     print(auth_url)
-    
+
     return redirect(auth_url)
 
 
@@ -48,7 +48,14 @@ def spotifyoauth():
 @login_required
 def yandexoauth():
     if current_user.yandex_token is None:
-        get_token()
+        qr_url, driver = sel_driver()
+        print(1)
+        print(qr_url)
+        return render_template(
+            "user/yandexoauth.html",
+            qr_url=qr_url
+        )
+        get_token(driver)
     return redirect(url_for("user.synchronization", music_service="Yandex Music"))
 
 

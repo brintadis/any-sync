@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto text-center">
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">Авторизация по QR-коду</h5>
+                <p class="card-text">Просканируйте QR любым удобным способом. Например, откройте приложение Яндекс , выберите QR-распознование поисковой строке  и наведите камеру на QR-код:</p>
+                <p class="card-text">{{ qr_url }}</p>
+                <p class="card-text">Установить Яндекс</p>
+                <div class="row">
+                    <div class="col">
+                        <a href="https://redirect.appmetrica.yandex.com/serve/458404701881276453?c=passport_bage" class="btn btn-dark">Google Play</a>
+                    </div>
+                    <div class="col">
+                        <a href="https://redirect.appmetrica.yandex.com/serve/386347106450828605?c=passport_bage" class="btn btn-dark">Apple Store</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
