@@ -159,16 +159,19 @@ def create_new_playlist(playlist_ids, client):
         revision = 1
         for track_name in track_list:
             resalt_search = client.search(f"{track_name}", type_="all")
-            if resalt_search.best.type == "track":
-                resalt_best_track_id = resalt_search.best.result.id
-                resalt_best_album_id = resalt_search.best.result.albums[0].id
-                client.users_playlists_insert_track(
-                    new_playlist.kind,
-                    resalt_best_track_id,
-                    resalt_best_album_id,
-                    revision=revision,
-                )
-                revision += 1
-            else:
+            if resalt_search.best is None:
                 print(f"Трек {track_name} отсутствует")
+            else:
+                if resalt_search.best.type == "track":
+                    resalt_best_track_id = resalt_search.best.result.id
+                    resalt_best_album_id = resalt_search.best.result.albums[0].id
+                    client.users_playlists_insert_track(
+                        new_playlist.kind,
+                        resalt_best_track_id,
+                        resalt_best_album_id,
+                        revision=revision,
+                    )
+                    revision += 1
+                else:
+                    print(f"Трек {track_name} отсутствует")
         revision = 0
