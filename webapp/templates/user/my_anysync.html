@@ -55,16 +55,20 @@
             for (let index = 0; index < playlist_name.length; index++) {
                 const element = playlist_name[index];
                 element.addEventListener("click", function () {
-                    element.innerHTML = "<input></input>";
-                    // element.innerHTML = element.innerHTML + "1";
-                    // 1. Создаём новый XMLHttpRequest-объект
-                    let xhr = new XMLHttpRequest();
-
-                    // 2. Настраиваем его: GET-запрос по URL /article/.../load
-                    xhr.open('GET', '/playlist/rename_playlist/' + element.id + "?playlist_name=" + element.innerHTML);
-
-                    // 3. Отсылаем запрос
-                    xhr.send();
+                    element.innerHTML = "<input id='42'></input>";
+                    document.querySelectorAll("#42").addEventListener("keypress", function (e) {
+                        if (e.key === 'Enter') {
+                        // code for enter
+                            // 1. Создаём новый XMLHttpRequest-объект
+                            let xhr = new XMLHttpRequest();
+        
+                            // 2. Настраиваем его: GET-запрос по URL /article/.../load
+                            xhr.open('GET', '/playlist/rename_playlist/' + element.id + "?playlist_name=" + document.querySelectorAll("#42").value);
+        
+                            // 3. Отсылаем запрос
+                            xhr.send();
+                        }
+                    })
                 })
             }
         </script>
