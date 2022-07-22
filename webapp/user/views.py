@@ -9,7 +9,7 @@ from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-from tasks import new_playlist
+from webapp.tasks import new_playlist
 from webapp.ya_music.token_ya import get_token, sel_driver
 
 
@@ -53,7 +53,7 @@ def yandexoauth():
         print(qr_url)
         return render_template(
             "user/yandexoauth.html",
-            qr_url=qr_url
+            qr_url=qr_url,
         )
         get_token(driver)
     return redirect(url_for("user.synchronization", music_service="Yandex Music"))
