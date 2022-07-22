@@ -40,7 +40,6 @@ def sel_driver():
 
     driver.find_element(By.XPATH, "//span[text()='QR-код']").click()
     sleep(5)
-    # скрин qr-кода
     qr_code = driver.find_element(By.CLASS_NAME, "MagicField-qr")
     # print(qr_code)
     qr_url = qr_code.value_of_css_property('background-image')
@@ -49,6 +48,9 @@ def sel_driver():
     print(qr_url)
     print(type(qr_url))
     # driver.get(qr_url)
+    # КНОПКА ПОДТВЕРДИТЬ ВХОД
+    driver.find_element(By.XPATH, "//button[type='submit']").click()
+
 
     return qr_url, driver
 

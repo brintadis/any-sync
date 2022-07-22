@@ -47,6 +47,7 @@ def spotifyoauth():
 @blueprint.route("/yandexoauth")
 @login_required
 def yandexoauth():
+    # изменить порядок драйвер,редирект,обработка токена
     if current_user.yandex_token is None:
         qr_url, driver = sel_driver()
         print(1)
