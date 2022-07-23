@@ -49,9 +49,6 @@ def sel_driver():
     print(type(qr_url))
     # driver.get(qr_url)
     # КНОПКА ПОДТВЕРДИТЬ ВХОД
-    driver.find_element(By.XPATH, "//button[type='submit']").click()
-
-
     return qr_url, driver
 
 
@@ -60,6 +57,7 @@ def get_token(driver):
 
     # driver.find_element(By.ID, "passp-field-login").send_keys(user_login)
     # driver.find_element(By.ID, "passp-field-login").send_keys(user_login)
+    driver.find_element(By.XPATH, "//button[type='submit']").click()
 
     token = None
 

@@ -55,8 +55,7 @@ def yandexoauth():
         return render_template(
             "user/yandexoauth.html",
             qr_url=qr_url,
-        )
-        get_token(driver)
+        ), get_token(driver)
     return redirect(url_for("user.synchronization", music_service="Yandex Music"))
 
 
