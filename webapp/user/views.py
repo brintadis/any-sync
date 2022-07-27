@@ -9,8 +9,8 @@ from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-from webapp.tasks import new_playlist
-from webapp.ya_music.token_ya import get_token, sel_driver
+from webapp.tasks import check_qr_code, new_playlist
+from webapp.ya_music.token_ya import sel_driver
 
 
 blueprint = Blueprint("user", __name__, url_prefix="/users")
@@ -49,13 +49,13 @@ def spotifyoauth():
 def yandexoauth():
     # изменить порядок драйвер,редирект,обработка токена
     if current_user.yandex_token is None:
-        qr_url, driver = sel_driver()
-        print(1)
-        print(qr_url)
+        qr_url, command_executor_url, session_id = sel_driver()
+        user_id = current_user.id
+        check_qr_code.delay(command_executor_url, session_id, user_id)
         return render_template(
             "user/yandexoauth.html",
             qr_url=qr_url,
-        ), get_token(driver)
+        )
     return redirect(url_for("user.synchronization", music_service="Yandex Music"))
 
 

@@ -2,18 +2,14 @@ import json
 from time import sleep
 
 # import os
-from flask_login import current_user
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.command import Command
+from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.webdriver.common.by import By
 
 from webapp import db
 from webapp.user.models import User
-
-# CACHES_FOLDER = 'webapp/ya_music/yandex_caches/'
-# if not os.path.exists(CACHES_FOLDER):
-#     os.makedirs(CACHES_FOLDER)
 
 
 def is_active(driver):
@@ -32,77 +28,88 @@ def sel_driver():
     capabilities = DesiredCapabilities.CHROME
     capabilities["loggingPrefs"] = {"performance": "ALL"}
     capabilities['goog:loggingPrefs'] = {'performance': 'ALL'}
-    driver = webdriver.Remote(desired_capabilities=capabilities,
-                              command_executor="http://selenium:4444/wd/hub")
+    driver = webdriver.Remote(desired_capabilities=capabilities, command_executor="http://selenium:4444/wd/hub")
     driver.get(
         "https://oauth.yandex.ru/authorize?response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d"
     )
-
+    sleep(2)
     driver.find_element(By.XPATH, "//span[text()='QR-код']").click()
-    sleep(5)
+
+    sleep(2)
     qr_code = driver.find_element(By.CLASS_NAME, "MagicField-qr")
-    # print(qr_code)
     qr_url = qr_code.value_of_css_property('background-image')
-    # print(qr_url)
     qr_url = qr_url.split('"')[1]
-    print(qr_url)
-    print(type(qr_url))
-    # driver.get(qr_url)
-    # КНОПКА ПОДТВЕРДИТЬ ВХОД
-    return qr_url, driver
+    command_executor_url = driver.command_executor._url
+    session_id = driver.session_id
+    print(command_executor_url)
+    print(session_id)
+
+    return qr_url, command_executor_url, session_id
 
 
-def get_token(driver):
+def get_token(url, session_id, user_id):
     # user_login = "makar.tim@example.com"
 
     # driver.find_element(By.ID, "passp-field-login").send_keys(user_login)
     # driver.find_element(By.ID, "passp-field-login").send_keys(user_login)
-    driver.find_element(By.XPATH, "//button[type='submit']").click()
 
-    token = None
+    # Save the original function, so we can revert our patch
+    org_command_execute = RemoteWebDriver.execute
 
-    while token is None and is_active(driver):
-        sleep(1)
+    def new_command_execute(self, command, params=None):
+        if command == "newSession":
+            # Mock the response
+            return {'success': 0, 'value': None, 'sessionId': session_id}
+        else:
+            return org_command_execute(self, command, params)
+
+    # Patch the function before creating the driver object
+    RemoteWebDriver.execute = new_command_execute
+
+    new_driver = webdriver.Remote(command_executor=url, desired_capabilities={})
+    new_driver.session_id = session_id
+
+    # Replace the patched function with original function
+    RemoteWebDriver.execute = org_command_execute
+    driver = new_driver
+    print(driver.current_url)
+    print(is_active(driver))
+    print(driver.session_id)
+
+    while is_active(driver):
         try:
-            logs_raw = driver.get_log("performance")
+            sleep(1)
+            driver.find_element(By.CLASS_NAME, "MagicField-qr")
+            print('Qr-code still on the page')
         except Exception:
-            pass
+            try:
+                sleep(1)
+                driver.find_element(By.CLASS_NAME, "Authorize-button").click()
+            except Exception:
+                print('No accept Button')
 
-        for lr in logs_raw:
-            log = json.loads(lr["message"])["message"]
-            url_fragment = log.get("params", {}).get("frame", {}).get("urlFragment")
+            token = None
+            print("I'm here!!!!!!!!!")
 
-            if url_fragment:
-                token = url_fragment.split("&")[0].split("=")[1]
+            while token is None and is_active(driver):
+                sleep(1)
+                try:
+                    logs_raw = driver.get_log("performance")
+                except Exception:
+                    pass
 
-    User.query.filter(User.id == current_user.id).update(dict(yandex_token=token))
-    db.session.commit()
+                for lr in logs_raw:
+                    log = json.loads(lr["message"])["message"]
+                    url_fragment = log.get("params", {}).get("frame", {}).get("urlFragment")
 
-    try:
-        driver.close()
-    except Exception:
-        pass
+                    if url_fragment:
+                        token = url_fragment.split("&")[0].split("=")[1]
 
-    # try:
-    #     driver.close()
-    # except:
-    #     pass
-    # cache_path = token_cache_path()
-    # try:
-    #     f = open(cache_path, "w")
-    #     f.write(token)
-    #     f.close()
-    # except IOError:
-    #     print('Couldn\'t write token to cache at: %s', cache_path)
+            print(token)
+            User.query.filter(User.id == user_id).update(dict(yandex_token=token))
+            db.session.commit()
 
-
-# def get_cach_token(token_path):
-#     token_info = ''
-#     try:
-#         f = open(token_path)
-#         token_info = f.read()
-#         f.close()
-
-#     except IOError as error:
-#         print("Couldn't read cache at: %s", {token_path})
-#     return token_info
+            try:
+                driver.close()
+            except Exception:
+                pass
