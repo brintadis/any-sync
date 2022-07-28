@@ -8,7 +8,7 @@ from selenium.webdriver.remote.command import Command
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.webdriver.common.by import By
 
-from webapp import db
+from webapp.db import db
 from webapp.user.models import User
 
 
@@ -66,7 +66,11 @@ def get_token(url, session_id, user_id):
     # Patch the function before creating the driver object
     RemoteWebDriver.execute = new_command_execute
 
-    new_driver = webdriver.Remote(command_executor=url, desired_capabilities={})
+    capabilities = DesiredCapabilities.CHROME
+    capabilities["loggingPrefs"] = {"performance": "ALL"}
+    capabilities['goog:loggingPrefs'] = {'performance': 'ALL'}
+
+    new_driver = webdriver.Remote(command_executor=url, desired_capabilities=capabilities)
     new_driver.session_id = session_id
 
     # Replace the patched function with original function

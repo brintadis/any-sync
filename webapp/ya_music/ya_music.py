@@ -148,7 +148,9 @@ def save_playlist(
     return new_playlist
 
 
-def create_new_playlist(playlist_ids, client):
+def create_new_playlist(playlist_ids, token):
+    client = Client(token).init()
+
     for id in playlist_ids:
         playlist_name = Playlist.query.filter(Playlist.id == int(id)).first()
         new_playlist = client.users_playlists_create(f"{playlist_name.playlist_name}")

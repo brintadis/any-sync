@@ -74,9 +74,9 @@ def sync_playlist():
             auth_manager=auth_manager,
         )
     elif music_service == "Yandex Music":
-        # token = current_user.yandex_token
+        token = current_user.yandex_token
         # client = Client(token).init()
-        new_playlist.delay(playlist_ids=playlist_ids)
+        new_playlist.delay(playlist_ids=playlist_ids, token=token)
     return redirect(url_for('user.profile'))
 
 
