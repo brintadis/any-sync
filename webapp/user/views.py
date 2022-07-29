@@ -1,3 +1,4 @@
+import tasks
 from datetime import datetime
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
@@ -9,7 +10,6 @@ from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-import tasks
 from webapp.ya_music.token_ya import sel_driver
 
 

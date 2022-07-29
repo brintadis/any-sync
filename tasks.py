@@ -1,8 +1,8 @@
 from celery import Celery
 from webapp import create_app
 
-celery_app = Celery('tasks', broker='redis://redis:6379/0')
 flask_app = create_app()
+celery_app = Celery('tasks', broker='redis://redis:6379/0')
 
 
 @celery_app.task()
