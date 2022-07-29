@@ -9,7 +9,7 @@ from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
-from webapp.tasks import check_qr_code, new_playlist
+import tasks
 from webapp.ya_music.token_ya import sel_driver
 
 
@@ -51,7 +51,7 @@ def yandexoauth():
     if current_user.yandex_token is None:
         qr_url, command_executor_url, session_id = sel_driver()
         user_id = current_user.id
-        check_qr_code.delay(command_executor_url, session_id, user_id)
+        tasks.check_qr_code.delay(command_executor_url, session_id, user_id)
         return render_template(
             "user/yandexoauth.html",
             qr_url=qr_url,
@@ -76,7 +76,7 @@ def sync_playlist():
     elif music_service == "Yandex Music":
         token = current_user.yandex_token
         # client = Client(token).init()
-        new_playlist.delay(playlist_ids=playlist_ids, token=token)
+        tasks.new_playlist.delay(playlist_ids=playlist_ids, token=token)
     return redirect(url_for('user.profile'))
 
 
