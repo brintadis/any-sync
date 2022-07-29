@@ -112,8 +112,8 @@ def get_token(url, session_id, user_id):
             print(token)
             User.query.filter(User.id == user_id).update(dict(yandex_token=token))
             db.session.commit()
-
-            try:
-                driver.close()
-            except Exception:
-                pass
+            sleep(20)
+            # try:
+            #     driver.close()
+            # except Exception:
+            #     pass

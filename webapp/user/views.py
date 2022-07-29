@@ -1,4 +1,3 @@
-import tasks
 from datetime import datetime
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
@@ -49,9 +48,10 @@ def spotifyoauth():
 def yandexoauth():
     # изменить порядок драйвер,редирект,обработка токена
     if current_user.yandex_token is None:
+        from webapp.tasks import check_qr_code
         qr_url, command_executor_url, session_id = sel_driver()
         user_id = current_user.id
-        tasks.check_qr_code.delay(command_executor_url, session_id, user_id)
+        check_qr_code.delay(command_executor_url, session_id, user_id)
         return render_template(
             "user/yandexoauth.html",
             qr_url=qr_url,
@@ -74,9 +74,10 @@ def sync_playlist():
             auth_manager=auth_manager,
         )
     elif music_service == "Yandex Music":
+        from webapp.tasks import new_playlist
         token = current_user.yandex_token
         # client = Client(token).init()
-        tasks.new_playlist.delay(playlist_ids=playlist_ids, token=token)
+        new_playlist.delay(playlist_ids=playlist_ids, token=token)
     return redirect(url_for('user.profile'))
 
 

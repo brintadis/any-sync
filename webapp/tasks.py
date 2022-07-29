@@ -1,8 +1,12 @@
-from celery import Celery
+from create_celelry_app import make_celery
 from webapp import create_app
 
 flask_app = create_app()
-celery_app = Celery('tasks', broker='redis://redis:6379/0')
+# flask_app.config.update(CELERY_CONFIG={
+#     'broker_url': 'redis://localhost:6379',
+#     'result_backend': 'redis://localhost:6379',
+# })
+celery_app = make_celery(flask_app)
 
 
 @celery_app.task()
