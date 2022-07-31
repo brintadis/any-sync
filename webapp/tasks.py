@@ -11,9 +11,8 @@ celery_app = make_celery(flask_app)
 
 @celery_app.task()
 def new_playlist(playlist_ids, token):
-    with flask_app.app_context:
-        from webapp.ya_music.ya_music import create_new_playlist
-        create_new_playlist(playlist_ids, token)
+    from webapp.ya_music.ya_music import create_new_playlist
+    create_new_playlist(playlist_ids, token)
 
 
 # @celery_app.task()

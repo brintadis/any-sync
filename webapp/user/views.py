@@ -46,15 +46,17 @@ def spotifyoauth():
 @login_required
 def yandex_login_process():
     form = YandexLoginForm()
+    flash_message = "Неправильное имя пользователя или пароль"
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
-        user_id = current_user.id
-        try:
-            yandex_ouath(email, password, user_id)
+        auth_result, flash_message = yandex_ouath(email, password)
+        if auth_result:
+            flash(flash_message)
             return redirect(url_for("user.synchronization", music_service="Yandex Music"))
-        except Exception:
-            return redirect(url_for('users.yandexoauth'))
+    flash(flash_message)
+
+    return redirect(url_for("user.yandexoauth"))
 
 
 @blueprint.route("/yandexoauth")
