@@ -16,8 +16,8 @@ def new_playlist(playlist_ids, token):
         create_new_playlist(playlist_ids, token)
 
 
-@celery_app.task()
-def check_qr_code(command_executor_url, session_id, client_id):
-    with flask_app.app_context():
-        from webapp.ya_music.token_ya import get_token
-        get_token(command_executor_url, session_id, client_id)
+# @celery_app.task()
+# def yandex_login(email, password, user_id):
+#     with flask_app.app_context():
+#         from webapp.ya_music.token_ya import yandex_ouath
+#         yandex_ouath(email, password, user_id)

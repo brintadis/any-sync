@@ -50,3 +50,15 @@ class RegistrationForm(FlaskForm):
         users_count = User.query.filter_by(email=email.data).count()
         if users_count > 0:
             raise ValidationError("Пользователь с такой почтой уже существует")
+
+
+class YandexLoginForm(FlaskForm):
+    email = StringField(
+        "Электронная почта",
+        validators=[DataRequired(), Email()],
+        render_kw={"class": "form-control"},
+    )
+    password = PasswordField(
+        "Пароль", validators=[DataRequired()], render_kw={"class": "form-control"}
+    )
+    submit = SubmitField("Отправить", render_kw={"class": "btn btn-primary"})

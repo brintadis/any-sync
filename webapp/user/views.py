@@ -7,10 +7,9 @@ from flask_login import current_user, login_required, login_user, logout_user
 from webapp.db import db
 from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
-from webapp.user.forms import LoginForm, RegistrationForm
+from webapp.user.forms import LoginForm, RegistrationForm, YandexLoginForm
 from webapp.user.models import User
-from webapp.ya_music.token_ya import sel_driver
-
+from webapp.ya_music.token_ya import yandex_ouath
 
 blueprint = Blueprint("user", __name__, url_prefix="/users")
 
@@ -43,18 +42,31 @@ def spotifyoauth():
     return redirect(url_for("user.synchronization", music_service="Spotify"))
 
 
+@blueprint.route('/yandex-login-process', methods=["POST"])
+@login_required
+def yandex_login_process():
+    form = YandexLoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        user_id = current_user.id
+        try:
+            yandex_ouath(email, password, user_id)
+            return redirect(url_for("user.synchronization", music_service="Yandex Music"))
+        except Exception:
+            return redirect(url_for('users.yandexoauth'))
+
+
 @blueprint.route("/yandexoauth")
 @login_required
 def yandexoauth():
-    # изменить порядок драйвер,редирект,обработка токена
     if current_user.yandex_token is None:
-        from webapp.tasks import check_qr_code
-        qr_url, command_executor_url, session_id = sel_driver()
-        user_id = current_user.id
-        check_qr_code.delay(command_executor_url, session_id, user_id)
+        title = 'Яндекс Авторизация'
+        form = YandexLoginForm()
         return render_template(
             "user/yandexoauth.html",
-            qr_url=qr_url,
+            page_title=title,
+            form=form,
         )
     return redirect(url_for("user.synchronization", music_service="Yandex Music"))
 
