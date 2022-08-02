@@ -102,8 +102,8 @@ celerybeat.pid
 *.sage.py
 
 # Docker
-Dockerfile
-docker-compose.yml
+# Dockerfile
+# docker-compose.yml
 data/
 
 # Spotify caches
