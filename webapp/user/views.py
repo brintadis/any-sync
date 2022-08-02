@@ -11,6 +11,7 @@ from webapp.user.forms import LoginForm, RegistrationForm, YandexLoginForm
 from webapp.user.models import User
 from webapp.ya_music.token_ya import yandex_ouath
 
+
 blueprint = Blueprint("user", __name__, url_prefix="/users")
 
 

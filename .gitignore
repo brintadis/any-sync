@@ -141,3 +141,4 @@ dmypy.json
 settings.py
 *.db
 data/db
+test_ya.py
