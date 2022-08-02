@@ -2,11 +2,9 @@ from flask import Flask, render_template, send_from_directory
 from flask_login import LoginManager
 from flask_migrate import Migrate
 
-from webapp.admin.views import blueprint as admin_blueprint
+from webapp.blueprints import init_blueprints
 from webapp.db import db
-from webapp.playlist.views import blueprint as playlist_blueprint
 from webapp.user.models import User
-from webapp.user.views import blueprint as user_blueprint
 
 
 def create_app():
@@ -19,9 +17,7 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = "user.login"
 
-    app.register_blueprint(admin_blueprint)
-    app.register_blueprint(playlist_blueprint)
-    app.register_blueprint(user_blueprint)
+    init_blueprints(app)
 
     @login_manager.user_loader
     def load_user(user_id):
