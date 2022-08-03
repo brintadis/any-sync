@@ -27,6 +27,17 @@ def is_active(driver):
         return False
 
 
+def close_webdriver(driver):
+    """
+    Close selenium webdriver
+    """
+    try:
+        driver.close()
+        driver.quit()
+    except Exception:
+        pass
+
+
 # def token_cache_path():
 #     return CACHES_FOLDER + str(current_user.id) + '.txt'
 
@@ -51,18 +62,18 @@ def yandex_ouath(email, password):
         options=options,
         )
     driver.get(
-        "https://oauth.yandex.ru/authorize?\
-        response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d"
+        "https://oauth.yandex.ru/authorize?response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d"
     )
 
-    sleep(3)
+    sleep(2)
     print(f'Email: {email}, password: {password}')
     driver.find_element(By.ID, "passp-field-login").send_keys(email)
     driver.find_element(By.ID, "passp:sign-in").click()
-    sleep(3)
+    sleep(2)
 
     try:
         driver.find_element(By.ID, "passp-field-confirmation-code")
+        close_webdriver(driver)
         return False, 'Неправильная электронная почта'
     except NoSuchElementException:
         pass
@@ -71,7 +82,9 @@ def yandex_ouath(email, password):
     driver.find_element(By.ID, "passp:sign-in").click()
 
     try:
-        driver.find_element(By.XPATH, "//div[text()='Неверный пароль']")
+        sleep(1)
+        driver.find_element(By.ID, "field:input-passwd:hint")
+        close_webdriver(driver)
         return False, 'Неверный пароль'
     except NoSuchElementException:
         pass
@@ -112,9 +125,6 @@ def get_token(driver):
     User.query.filter(User.id == current_user.id).update(dict(yandex_token=token))
     db.session.commit()
 
-    try:
-        driver.close()
-    except Exception:
-        pass
+    close_webdriver(driver)
 
     return token

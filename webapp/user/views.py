@@ -13,7 +13,6 @@ from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm, YandexLoginForm
 from webapp.user.models import User
 from webapp.ya_music.token_ya import yandex_ouath
-from webapp.tasks import new_playlist
 
 
 blueprint = Blueprint("user", __name__, url_prefix="/users")
@@ -111,6 +110,7 @@ def sync_playlist():
             auth_manager=auth_manager,
         )
     elif music_service == "Yandex Music":
+        from webapp.tasks import new_playlist
         token = current_user.yandex_token
         # client = Client(token).init()
         new_playlist.delay(playlist_ids=playlist_ids, token=token)
