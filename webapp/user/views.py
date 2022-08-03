@@ -12,6 +12,7 @@ from webapp.playlist.models import Playlist
 from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm, YandexLoginForm
 from webapp.user.models import User
+from webapp.ya_music.token_ya import yandex_ouath
 
 
 blueprint = Blueprint("user", __name__, url_prefix="/users")
@@ -63,7 +64,6 @@ def yandex_login_process():
     form = YandexLoginForm()
     flash_message = "Неправильное имя пользователя или пароль"
     if form.validate_on_submit():
-        from webapp.ya_music.token_ya import yandex_ouath
         email = form.email.data
         password = form.password.data
         auth_result, flash_message = yandex_ouath(email, password)
