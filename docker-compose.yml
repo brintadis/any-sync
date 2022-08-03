@@ -8,7 +8,7 @@ services:
       - PYTHONUNBUFFERED=True  
       - FLASK_APP=webapp
       - FLASK_DEBUG=1
-      - FLASK_SECRET=dbf54d1e40434f5c8c74314c11191ce0
+      - FLASK_SECRET=Your unique flask app secret key
     volumes:
       - .:/backend
     ports:
@@ -40,7 +40,7 @@ services:
       - PYTHONUNBUFFERED=True  
       - FLASK_APP=webapp
       - FLASK_DEBUG=1
-      - FLASK_SECRET=dbf54d1e40434f5c8c74314c11191ce0
+      - FLASK_SECRET=Your unique flask app secret key
     volumes:
       - .:/backend
     command:

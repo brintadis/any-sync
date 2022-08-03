@@ -2,8 +2,8 @@
 FROM python:3.9
 # Устанавливаем рабочую директорию для проекта в контейнере
 WORKDIR /backend
-ENV SPOTIFY_CLIENT_ID=05aecee3d14b494d89ee2fcf8faede62
-ENV SPOTIFY_CLIENT_SECRET=b28942419390419881759ed6ccc7e2cc
+ENV SPOTIFY_CLIENT_ID='Your Spotify App Client ID'
+ENV SPOTIFY_CLIENT_SECRET='Your Spotify App Client Secret'
 
 # Скачиваем/обновляем необходимые библиотеки для проекта 
 COPY requirements.txt /backend
