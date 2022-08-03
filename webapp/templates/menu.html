@@ -9,18 +9,6 @@
 			<li class="nav-item">
 				<a class="nav-link" href="/">Главная</a>
 			</li>
-			<li class="nav-item dropdown disabled">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					TESTING
-				</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="/playlist">Cтраница с формой</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="{{ url_for('playlist.playlist_user', user_id=current_user.id) }}">Мои плейлисты</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="{{ url_for('playlist.all_playlists') }}">Все плейлисты</a>
-				</div>
-			</li>
 		</ul>
 		<ul class="navbar-nav mr-right">
 			{% if current_user.is_authenticated %}
