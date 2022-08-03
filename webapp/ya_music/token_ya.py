@@ -1,9 +1,13 @@
+"""
+Yandex token processing
+"""
 import json
 from time import sleep
 from flask_login import current_user
 
 # import os
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.remote.command import Command
 from selenium.webdriver.common.by import By
@@ -13,6 +17,9 @@ from webapp.user.models import User
 
 
 def is_active(driver):
+    """
+    Check if selenium driver is active
+    """
     try:
         driver.execute(Command.GET_ALL_COOKIES)
         return True
@@ -24,6 +31,9 @@ def is_active(driver):
 #     return CACHES_FOLDER + str(current_user.id) + '.txt'
 
 def yandex_ouath(email, password):
+    """
+    Yandex auth using selenium webdriver
+    """
     # make chrome log requests
     capabilities = DesiredCapabilities.CHROME
     capabilities["loggingPrefs"] = {"performance": "ALL"}
@@ -41,7 +51,8 @@ def yandex_ouath(email, password):
         options=options,
         )
     driver.get(
-        "https://oauth.yandex.ru/authorize?response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d"
+        "https://oauth.yandex.ru/authorize?\
+        response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d"
     )
 
     sleep(3)
@@ -53,7 +64,7 @@ def yandex_ouath(email, password):
     try:
         driver.find_element(By.ID, "passp-field-confirmation-code")
         return False, 'Неправильная электронная почта'
-    except Exception:
+    except NoSuchElementException:
         pass
 
     driver.find_element(By.ID, "passp-field-passwd").send_keys(password)
@@ -62,18 +73,21 @@ def yandex_ouath(email, password):
     try:
         driver.find_element(By.XPATH, "//div[text()='Неверный пароль']")
         return False, 'Неверный пароль'
-    except Exception:
+    except NoSuchElementException:
         pass
 
     token = get_token(driver)
 
     if token is None:
         return False, 'Ошибка при авторизации, пожалуйста, попробуйте еще раз'
-    else:
-        return token, "Вы успешно авторизовались через Яндекс"
+
+    return token, "Вы успешно авторизовались через Яндекс"
 
 
 def get_token(driver):
+    """
+    Extracting token from logs, saving into db
+    """
 
     token = None
 

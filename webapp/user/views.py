@@ -1,3 +1,6 @@
+"""
+Init user views
+"""
 from datetime import datetime
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
@@ -10,6 +13,7 @@ from webapp.spotify.spotify import spotify_auth, sync_to_spotify
 from webapp.user.forms import LoginForm, RegistrationForm, YandexLoginForm
 from webapp.user.models import User
 from webapp.ya_music.token_ya import yandex_ouath
+from webapp.tasks import new_playlist
 
 
 blueprint = Blueprint("user", __name__, url_prefix="/users")
@@ -18,6 +22,9 @@ blueprint = Blueprint("user", __name__, url_prefix="/users")
 @blueprint.route("/profile")
 @login_required
 def profile():
+    """
+    User profile page
+    """
     title = "Мой AnySync"
     playlists = Playlist.query.filter(Playlist.user == current_user.id)
     return render_template("user/my_anysync.html", title=title, playlists=playlists)
@@ -26,6 +33,9 @@ def profile():
 @blueprint.route("/startspotoauth")
 @login_required
 def start_spot_oauth():
+    """
+    Getting an auth_url then redirect
+    """
     auth_manager = spotify_auth()
     auth_url = auth_manager.get_authorize_url()
     print(auth_url)
@@ -36,6 +46,9 @@ def start_spot_oauth():
 @blueprint.route("/spotifyoauth")
 @login_required
 def spotifyoauth():
+    """
+    Getting spotify auth token
+    """
     auth_manager = spotify_auth()
     print(request.args)
     auth_manager.get_access_token(request.args.get("code"))
@@ -46,6 +59,9 @@ def spotifyoauth():
 @blueprint.route('/yandex-login-process', methods=["POST"])
 @login_required
 def yandex_login_process():
+    """
+    Yandex auth process page, validating form
+    """
     form = YandexLoginForm()
     flash_message = "Неправильное имя пользователя или пароль"
     if form.validate_on_submit():
@@ -63,6 +79,9 @@ def yandex_login_process():
 @blueprint.route("/yandexoauth")
 @login_required
 def yandexoauth():
+    """
+    Check if the user already have a token, if not redirect to Yandex Auth
+    """
     if current_user.yandex_token is None:
         title = 'Яндекс Авторизация'
         form = YandexLoginForm()
@@ -77,6 +96,9 @@ def yandexoauth():
 @blueprint.route("/sync-playlist")
 @login_required
 def sync_playlist():
+    """
+    Sync playlist in music service
+    """
     playlist_ids = request.values.getlist("playlist")
     music_service = request.values.get("music_service")
     public_playlist = request.values.get("public_playlist") == "True"
@@ -89,7 +111,6 @@ def sync_playlist():
             auth_manager=auth_manager,
         )
     elif music_service == "Yandex Music":
-        from webapp.tasks import new_playlist
         token = current_user.yandex_token
         # client = Client(token).init()
         new_playlist.delay(playlist_ids=playlist_ids, token=token)
@@ -99,6 +120,9 @@ def sync_playlist():
 @blueprint.route("/synchronization/<music_service>")
 @login_required
 def synchronization(music_service):
+    """
+    Synchronization page with playlist checkboxes
+    """
     title = "Синхронизация плейлистов"
     playlists = Playlist.query.filter(Playlist.user == current_user.id)
 
@@ -112,6 +136,9 @@ def synchronization(music_service):
 
 @blueprint.route("/login")
 def login():
+    """
+    Login page
+    """
     if current_user.is_authenticated:
         return redirect(url_for("index"))
     title = "Авторизация"
@@ -122,6 +149,9 @@ def login():
 
 @blueprint.route("/process-login", methods=["POST"])
 def process_login():
+    """
+    Validatin login form
+    """
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -136,6 +166,9 @@ def process_login():
 
 @blueprint.route("/logout")
 def logout():
+    """
+    Logout view
+    """
     logout_user()
     flash("Вы успешно разлогинились")
 
@@ -144,6 +177,9 @@ def logout():
 
 @blueprint.route("/register")
 def register():
+    """
+    Registration page
+    """
     if current_user.is_authenticated:
         return redirect(url_for("index"))
     title = "Регистрация"
@@ -154,6 +190,9 @@ def register():
 
 @blueprint.route("/process-reg", methods=["POST"])
 def process_reg():
+    """
+    Validating registration form
+    """
     form = RegistrationForm()
     if form.validate_on_submit():
         new_user = User(
@@ -167,11 +206,11 @@ def process_reg():
         db.session.commit()
         flash("Вы успешно зарегистрировались!")
         return redirect(url_for("user.login"))
-    else:
-        for field, errors in form.errors.items():
-            for error in errors:
-                flash(
-                    f'Ошибка в поле \
-                    "{getattr(form, field).label.text}": - {error}'
-                )
-        return redirect(url_for("user.register"))
+
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(
+                f'Ошибка в поле \
+                "{getattr(form, field).label.text}": - {error}'
+            )
+    return redirect(url_for("user.register"))

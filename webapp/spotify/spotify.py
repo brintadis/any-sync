@@ -1,3 +1,7 @@
+"""
+Main spotify processing .py file
+Searching and processing playlist, adding into db, creating playlist etc.
+"""
 import os
 from datetime import datetime, timedelta
 
@@ -26,11 +30,20 @@ if not os.path.exists(CACHES_FOLDER):
     os.makedirs(CACHES_FOLDER)
 
 
-def get_playlist_tracks(sp, playlist_id):
-    results = sp.playlist_tracks(playlist_id)
+def get_playlist_tracks(spotipy_client, playlist_id):
+    """Playlist's tracks
+
+    Args:
+        spotipy_client (spotipy client): spotipy cient
+        playlist_id: playlist id
+
+    Returns:
+        json of the playlist tracks
+    """
+    results = spotipy_client.playlist_tracks(playlist_id)
     tracks = results["items"]
     while results["next"]:
-        results = sp.next(results)
+        results = spotipy_client.next(results)
         tracks.extend(results["items"])
     return tracks
 
@@ -44,7 +57,7 @@ def get_playlist_by_id(playlist_url):
     Returns:
         function: Return saved playlist function.
     """
-    sp = spotipy.Spotify(
+    spotipy_client = spotipy.Spotify(
         auth_manager=SpotifyClientCredentials(
             client_id=CLIENT_ID, client_secret=CLIENT_SECRET
         )
@@ -55,11 +68,11 @@ def get_playlist_by_id(playlist_url):
     if "?" in playlist_id:
         playlist_id = playlist_id.split("?")[0]
 
-    playlist = sp.playlist(playlist_id=playlist_id)
+    playlist = spotipy_client.playlist(playlist_id=playlist_id)
     playlist_name = playlist["name"]
     owner_name = playlist["owner"]["display_name"]
     img_cover = playlist["images"][0]["url"]
-    tracks = get_playlist_tracks(sp=sp, playlist_id=playlist_id)
+    tracks = get_playlist_tracks(spotipy_client=spotipy_client, playlist_id=playlist_id)
 
     return save_playlist(
         playlist_name=playlist_name,
@@ -71,10 +84,20 @@ def get_playlist_by_id(playlist_url):
 
 
 def session_cache_path():
+    """Sessian cache path handler
+
+    Returns:
+        os spotify_token_path
+    """
     return CACHES_FOLDER + str(current_user.id)
 
 
 def spotify_auth():
+    """Auth with spotify
+
+    Returns:
+        auth_manager required for creating playlists
+    """
     cache_handler = spotipy.cache_handler.CacheFileHandler(
         cache_path=session_cache_path()
     )
@@ -103,9 +126,9 @@ def sync_to_spotify(playlist_ids, public_playlist, auth_manager):
         public_playlist (`bool`): Will be the playlist private or not.
     """
 
-    sp = spotipy.Spotify(auth_manager=auth_manager)
+    spotipy_client = spotipy.Spotify(auth_manager=auth_manager)
 
-    user_id = sp.current_user()["id"]
+    user_id = spotipy_client.current_user()["id"]
 
     for playlist_id in playlist_ids:
         print(playlist_id)
@@ -117,7 +140,7 @@ def sync_to_spotify(playlist_ids, public_playlist, auth_manager):
         # Searching Spotify for songs by title and artist
         songs_uris = []
         for track in tracks:
-            search_results = sp.search(
+            search_results = spotipy_client.search(
                 q=f"track:{track.track_name}, artist:{track.artist}", type="track"
             )
             try:
@@ -130,21 +153,20 @@ def sync_to_spotify(playlist_ids, public_playlist, auth_manager):
                 )
 
         # Creating a private playlist
-        playlist = sp.user_playlist_create(
+        playlist = spotipy_client.user_playlist_create(
             user=user_id, name=playlist_to_create.playlist_name, public=public_playlist
         )
 
         # Adding songs found to the new playlist
-        sp.playlist_add_items(playlist_id=playlist["id"], items=songs_uris)
-
-        # Updating an exist playlist's cover
-        # sp.playlist_upload_cover_image(
-        #     playlist_id=playlist["id"],
-        #     image_b64=playlist_to_create.img_cover
-        # )
+        spotipy_client.playlist_add_items(playlist_id=playlist["id"], items=songs_uris)
 
 
 def save_playlist(playlist_name, owner_name, tracks, id_playlist, img_cover):
+    """Save playlist into db
+
+    Returns:
+        Last saved playlist
+    """
     new_playlist = Playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,

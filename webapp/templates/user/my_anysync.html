@@ -4,7 +4,7 @@
 <div class="row mt-5 mb-5 text-center">
     <div class="col">
         <h2 class="mb-3">AnySync</h2>
-        <a href="{{ url_for('playlist.test') }}" type="button" class="btn btn-secondary">Добавить новый плейлист</a>
+        <a href="{{ url_for('playlist.search_playlist_by_url') }}" type="button" class="btn btn-secondary">Добавить новый плейлист</a>
         <div class="btn-group dropright">
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Синхронизация плейлистов
@@ -49,29 +49,6 @@
                 </div>
             </div>
         </div>
-        <script>
-            var playlist_name=document.querySelectorAll(".card-title");
-            console.log(playlist_name);
-            for (let index = 0; index < playlist_name.length; index++) {
-                const element = playlist_name[index];
-                element.addEventListener("click", function () {
-                    element.innerHTML = "<input id='42'></input>";
-                    document.querySelectorAll("#42").addEventListener("keypress", function (e) {
-                        if (e.key === 'Enter') {
-                        // code for enter
-                            // 1. Создаём новый XMLHttpRequest-объект
-                            let xhr = new XMLHttpRequest();
-        
-                            // 2. Настраиваем его: GET-запрос по URL /article/.../load
-                            xhr.open('GET', '/playlist/rename_playlist/' + element.id + "?playlist_name=" + document.querySelectorAll("#42").value);
-        
-                            // 3. Отсылаем запрос
-                            xhr.send();
-                        }
-                    })
-                })
-            }
-        </script>
     {% endfor %}
 </div>
 {% endblock %}

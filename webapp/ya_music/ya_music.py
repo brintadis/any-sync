@@ -1,3 +1,8 @@
+"""
+Main yandex_music.py file
+Cover_processing, searching playlists by url, saving into db, creating new playlist in Yandex Music
+"""
+
 import os
 import shutil
 from datetime import datetime, timedelta
@@ -114,6 +119,11 @@ def get_playlist_ya(url):
 def save_playlist(
     playlist_name, owner_name, tracks, kind_playlist, img_cover_url
 ):  # noqa: E501
+    """Save playlist into db
+
+    Returns:
+        Last saved playlist
+    """
     new_playlist = Playlist(
         playlist_name=playlist_name,
         owner_name=owner_name,
@@ -149,6 +159,12 @@ def save_playlist(
 
 
 def create_new_playlist(playlist_ids, token):
+    """Create new playlist
+
+    Args:
+        playlist_ids (list): playlist ids from our db to create
+        token (str): user's token required to work with yandex api
+    """
     client = Client(token).init()
 
     for id in playlist_ids:

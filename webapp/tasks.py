@@ -1,3 +1,6 @@
+"""
+Celery tasks
+"""
 from create_celelry_app import make_celery
 from webapp import create_app
 
@@ -11,13 +14,8 @@ celery_app = make_celery(flask_app)
 
 @celery_app.task()
 def new_playlist(playlist_ids, token):
+    """
+    Creating new playlist using celery
+    """
     from webapp.ya_music.ya_music import create_new_playlist
     create_new_playlist(playlist_ids, token)
-
-
-# @celery_app.task()
-# def yandex_login(email, password, user_id):
-#     with flask_app.app_context():
-#         from webapp.ya_music.token_ya import yandex_ouath
-#         yandex_ouath(email, password, user_id)
-

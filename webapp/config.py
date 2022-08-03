@@ -1,3 +1,6 @@
+"""
+Main webapp confing file
+"""
 import os
 from datetime import timedelta
 

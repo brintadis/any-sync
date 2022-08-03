@@ -1,5 +1,11 @@
 {
-    "python.linting.pylintEnabled": false,
-    "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
-  }
+	"python.linting.pylintArgs": [
+		"--load-plugins",
+		"pylint_flask_sqlalchemy",
+		"pylint_flask",
+	],
+	"python.linting.pylintEnabled": false,
+	"python.linting.flake8Enabled": true,
+	"python.linting.enabled": true,
+	
+}

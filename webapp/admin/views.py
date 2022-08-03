@@ -1,3 +1,6 @@
+"""
+Admin views
+"""
 from flask import Blueprint, render_template
 
 from webapp.playlist.models import Playlist
@@ -10,6 +13,12 @@ blueprint = Blueprint("admin", __name__, url_prefix="/admin")
 @blueprint.route("/")
 @admin_required
 def admin_index():
+    """
+    Admin index page
+
+    Returns:
+        HTML admin index page
+    """
     title = "Админ панель"
     users = User.query.all()
     users_count = User.query.count()

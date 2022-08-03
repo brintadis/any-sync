@@ -1,3 +1,6 @@
+"""
+Collage processing.
+"""
 from PIL import Image
 
 

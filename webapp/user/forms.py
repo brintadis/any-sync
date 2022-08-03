@@ -1,3 +1,6 @@
+"""
+Init user forms
+"""
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
@@ -6,6 +9,9 @@ from webapp.user.models import User
 
 
 class LoginForm(FlaskForm):
+    """
+    Login form
+    """
     username = StringField(
         "Имя пользователя",
         validators=[DataRequired()],
@@ -21,6 +27,9 @@ class LoginForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
+    """
+    Registration form
+    """
     username = StringField(
         "Имя пользователя",
         validators=[DataRequired()],
@@ -42,17 +51,26 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField("Отправить", render_kw={"class": "btn btn-primary"})
 
     def validate_username(self, username):
+        """
+        Validating an username
+        """
         users_count = User.query.filter_by(username=username.data).count()
         if users_count > 0:
             raise ValidationError("Пользователь с таким именем уже существует")
 
     def validate_email(self, email):
+        """
+        Validating an email
+        """
         users_count = User.query.filter_by(email=email.data).count()
         if users_count > 0:
             raise ValidationError("Пользователь с такой почтой уже существует")
 
 
 class YandexLoginForm(FlaskForm):
+    """
+    Yandex login form
+    """
     email = StringField(
         "Электронная почта",
         validators=[DataRequired(), Email()],

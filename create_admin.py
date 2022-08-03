@@ -1,3 +1,10 @@
+"""
+Creating a superuser with:
+    username,
+    email,
+    password
+for our flask-app then add it into db.
+"""
 import sys
 from datetime import datetime
 from getpass import getpass
@@ -35,4 +42,4 @@ new_user.set_password(password)
 
 db.session.add(new_user)
 db.session.commit()
-print('User with id {} added'.format(new_user.id))
+print(f'User with id {new_user.id} added')
