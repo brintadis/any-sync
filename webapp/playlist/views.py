@@ -2,7 +2,7 @@
 Playlist views
 """
 from datetime import datetime
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import login_required
 
 from webapp.db import db
@@ -25,15 +25,37 @@ def search_playlist_by_url():
     title = "AnySync"
     url_form = PlaylistLinkForm()
 
+    return render_template("playlist/search_playlist_by_url.html", page_title=title, form=url_form)
+
+
+@blueprint.route("/search-playlist-process", methods=["POST"])
+@login_required
+def search_playlist_process():
+    """
+    Search playlist process page, validating the form
+    """
+    url_form = PlaylistLinkForm()
     if url_form.validate_on_submit():
         if "spotify" in url_form.link.data:
-            new_playlist = get_playlist_by_id(url_form.link.data)
-            return redirect(url_for("playlist.playlist", playlist_id=new_playlist.id))
+            try:
+                new_playlist = get_playlist_by_id(url_form.link.data)
+                return redirect(url_for("playlist.playlist", playlist_id=new_playlist.id))
+            except Exception:
+                flash('Несуществующий плейлист в Spotify')
+                return redirect(url_for("playlist.search_playlist_by_url"))
         if "yandex" in url_form.link.data:
-            new_playlist = get_playlist_ya(url_form.link.data)
-            return redirect(url_for("playlist.playlist", playlist_id=new_playlist.id))
+            try:
+                new_playlist = get_playlist_ya(url_form.link.data)
+                return redirect(url_for("playlist.playlist", playlist_id=new_playlist.id))
+            except Exception:
+                flash('Несуществующий плейлист в Yandex Music')
+                return redirect(url_for("playlist.search_playlist_by_url"))
 
-    return render_template("playlist/search_playlist_by_url.html", page_title=title, form=url_form)
+        flash("Неправильная ссылка, попробуйте еще раз")
+        return redirect(url_for("playlist.search_playlist_by_url"))
+
+    flash("Ошибка при заполнении формы, попробуйте еще раз")
+    return redirect(url_for("playlist.search_playlist_by_url"))
 
 
 @blueprint.route("/playlists")

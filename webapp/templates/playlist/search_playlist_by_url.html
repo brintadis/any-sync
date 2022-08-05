@@ -5,7 +5,7 @@
 	<div class="col">
 		<h4 class="pb-3 text-center">Создание плейлиста</h4>
 		<p class="text-center">Для добавления плейлиста укажите ссылку.</p>
-		<form class="pt-3" action="" method="post">
+		<form class="pt-3" action="{{ url_for('playlist.search_playlist_process') }}" method="post">
 			{{ form.hidden_tag() }}
 			<div class="form-group">
 				{{ form.link.label }} {{ form.link() }}
