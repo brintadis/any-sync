@@ -21,6 +21,13 @@ class User(db.Model, UserMixin):
     yandex_token = db.Column(db.String(100), nullable=True)
     spotify_token = db.Column(db.String(500), nullable=True)
 
+    def __init__(self, email: str, password_plaintext: str):
+        """
+        Create a new user object using email and hashing the password.
+        """
+        self.email = email
+        self.password = self.set_password(password_plaintext)
+
     def __repr__(self):
         """
         Rerp of a User model
